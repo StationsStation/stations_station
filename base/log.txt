@@ -1,0 +1,10 @@
+2024-08-14 15:18:02,066 [INFO] aea.base.packages.eightballer.connections.http_server: [base] HTTP Server has connected to port: 8888.
+2024-08-14 15:18:02,075 [INFO] aea.base.packages.eightballer.connections.prometheus: [base] Prometheus server started at 0.0.0.0:26658
+2024-08-14 15:18:02,078 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] setting up HttpHandler
+2024-08-14 15:18:02,080 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] setting up PrometheusHandler
+2024-08-14 15:18:02,082 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] setting up AdvancedDataRequestBehaviour
+2024-08-14 15:18:02,084 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] Adding Prometheus metric: num_retrievals
+2024-08-14 15:18:02,086 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] Adding Prometheus metric: num_requests
+2024-08-14 15:18:02,090 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] Adding Prometheus metric: memory_usage
+2024-08-14 15:18:02,092 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] Adding Prometheus metric: cpu_usage
+2024-08-14 15:18:02,097 [INFO] aea.base.agent_loop: [base] Start processing messages...

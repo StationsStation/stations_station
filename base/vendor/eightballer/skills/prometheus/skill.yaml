@@ -1,0 +1,68 @@
+name: prometheus
+author: eightballer
+version: 0.1.0
+type: skill
+description: The scaffold skill is a scaffold for your own skill implementation.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeicb4zxa7sqqthjbymmltkgbruhyom5f57pdqihofzjmxshy363dd4
+  behaviours.py: bafybeier6sr3on77k6szlghbvzgd2z2l5jxi3atziykjkwnmcotlqknl4a
+  dialogues.py: bafybeiapq2xxo2dbhqgnzavjnadv4og2neezn3zt4cnlxnfzpk2jxbgb5i
+  handlers.py: bafybeifjkn3tewtokaex7ybxsyni4wmmboi6aoj65rezr6venst2xcanm4
+  strtaegy.py: bafybeig4f5jcqu532lq45fez6phbntlnlco4dkpox7sgrsyjli3ozd5a3m
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/prometheus:0.1.1:bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca
+contracts: []
+protocols:
+- eightballer/prometheus:1.0.0:bafybeie3sy2m3ltmnkrldx4vux26xbyokay6eh7datiacr2ropqwj3r3ga
+- valory/http:1.0.0:bafybeieshrrplt5oadws5tz3rhjo6m2spchdyhkwa2z6ze2bs4ivauusfq
+skills: []
+behaviours:
+  prometheus_behaviour:
+    args: {}
+    class_name: PrometheusBehaviour
+handlers:
+  http_handler:
+    args: {}
+    class_name: HttpHandler
+  prometheus_handler:
+    args: {}
+    class_name: PrometheusHandler
+models:
+  data_request_model:
+    args:
+      body: ''
+      decimals: 5
+      method: GET
+      outputs: []
+      url: ''
+    class_name: DataRequestModel
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  prometheus_dialogues:
+    args:
+      enabled: true
+      metrics:
+      - name: num_retrievals
+        type: Gauge
+        description: Number of data retrievals
+        labels: {}
+      - name: num_requests
+        type: Gauge
+        description: Number of data requests served
+        labels: {}
+      - name: memory_usage
+        type: Gauge
+        description: Memory usage of the agent
+        labels: {}
+      - name: cpu_usage
+        type: Gauge
+        description: CPU usage of the agent
+        labels: {}
+    class_name: PrometheusDialogues
+dependencies: {}
+is_abstract: false
+customs: []

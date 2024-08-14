@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "protocol/eightballer/http/0.1.0": "bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a",
+        "protocol/eightballer/default/0.1.0": "bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma",
+        "connection/eightballer/http_client/0.1.0": "bafybeicv74672gixihzkeitlo55ciritxd74xedcdcptblszynpq2q5j4m",
+        "connection/eightballer/http_server/0.1.0": "bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u",
+        "skill/eightballer/metrics/0.1.0": "bafybeihkzxpng2bg34hlzpm6nmuiqbrb45ntthmcnvs7k6hlkamzn7n5we",
+        "agent/eightballer/base/0.1.0": "bafybeicw2rmsqi373epkx7bgwbqwt2mniiswbqxciaeqwaizmcqcetwhsm"
+    },
+    "third_party": {
+        "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi"
+    }
+
+}

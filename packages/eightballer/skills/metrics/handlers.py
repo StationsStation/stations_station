@@ -23,15 +23,15 @@
 import json
 from typing import cast
 
-from aea.protocols.base import Message
 from aea.skills.base import Handler
+from aea.protocols.base import Message
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.metrics.dialogues import (
-    DefaultDialogues,
     HttpDialogue,
     HttpDialogues,
+    DefaultDialogues,
 )
 
 
@@ -70,9 +70,7 @@ class HttpHandler(Handler):
 
         :param http_msg: the message
         """
-        self.context.logger.info(
-            f"received invalid http message={http_msg}, unidentified dialogue."
-        )
+        self.context.logger.info(f"received invalid http message={http_msg}, unidentified dialogue.")
         default_dialogues = cast(DefaultDialogues, self.context.default_dialogues)
         default_msg, _ = default_dialogues.create(
             counterparty=http_msg.sender,
@@ -83,9 +81,7 @@ class HttpHandler(Handler):
         )
         self.context.outbox.put_message(message=default_msg)
 
-    def _handle_request(
-        self, http_msg: HttpMessage, http_dialogue: HttpDialogue
-    ) -> None:
+    def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """
         Handle a Http request.
 
@@ -146,9 +142,7 @@ class HttpHandler(Handler):
         self.context.logger.info(f"responding with: {http_response}")
         self.context.outbox.put_message(message=http_response)
 
-    def _handle_invalid(
-        self, http_msg: HttpMessage, http_dialogue: HttpDialogue
-    ) -> None:
+    def _handle_invalid(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """
         Handle an invalid http message.
 
@@ -156,8 +150,11 @@ class HttpHandler(Handler):
         :param http_dialogue: the http dialogue
         """
         self.context.logger.warning(
-            f"cannot handle http message of performative={http_msg.performative} in "
-            + f"dialogue={http_dialogue.dialogue_label}."
+            f"""
+            Cannot handle http message of 
+            performative={http_msg.performative}
+            dialogue={http_dialogue.dialogue_label}.
+            """
         )
 
     def teardown(self) -> None:

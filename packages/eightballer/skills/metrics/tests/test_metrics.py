@@ -1,18 +1,19 @@
 """Test the metrics skill."""
 
+import os
 import json
 import logging
-import os
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 from unittest.mock import patch
 
-from aea.protocols.dialogue.base import DialogueMessage
 from aea.test_tools.test_skill import BaseSkillTestCase
+from aea.protocols.dialogue.base import DialogueMessage
 
 from packages.eightballer.protocols.http.message import HttpMessage
-from packages.eightballer.skills.metrics.dialogues import HttpDialogues
 from packages.eightballer.skills.metrics.handlers import HttpHandler
+from packages.eightballer.skills.metrics.dialogues import HttpDialogues
+
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
@@ -26,14 +27,10 @@ class TestHttpHandler(BaseSkillTestCase):
     def setup(cls):  # pylint: disable=W0221
         """Setup the test class."""
         super().setup_class()
-        cls.http_handler = cast(
-            HttpHandler, cls._skill.skill_context.handlers.metrics_handler
-        )
+        cls.http_handler = cast(HttpHandler, cls._skill.skill_context.handlers.metrics_handler)
         cls.logger = cls._skill.skill_context.logger
 
-        cls.http_dialogues = cast(
-            HttpDialogues, cls._skill.skill_context.http_dialogues
-        )
+        cls.http_dialogues = cast(HttpDialogues, cls._skill.skill_context.http_dialogues)
 
         cls.get_method = "get"
         cls.post_method = "post"
@@ -124,6 +121,6 @@ class TestHttpHandler(BaseSkillTestCase):
     @classmethod
     def teardown(cls, *args, **kwargs):  # noqa
         """Teardown the test class."""
-        db_fn = "test.db"
-        if os.path.exists(db_fn):
-            os.remove("test.db")
+        db_fn = Path("test.db")
+        if db_fn.exists():
+            db_fn.unlink()

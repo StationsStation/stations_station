@@ -8,3 +8,5 @@
 2024-08-14 15:18:02,090 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] Adding Prometheus metric: memory_usage
 2024-08-14 15:18:02,092 [INFO] aea.base.packages.eightballer.skills.prometheus: [base] Adding Prometheus metric: cpu_usage
 2024-08-14 15:18:02,097 [INFO] aea.base.agent_loop: [base] Start processing messages...
+2024-08-14 16:26:37,760 [INFO] aea.base.packages.eightballer.connections.http_client: [base] HTTP Client has shutdown on port: 8000.
+2024-08-14 16:26:37,762 [INFO] aea.base.packages.eightballer.connections.http_server: [base] HTTP Server has shutdown on port: 8888.

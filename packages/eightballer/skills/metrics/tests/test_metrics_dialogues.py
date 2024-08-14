@@ -19,19 +19,20 @@
 # ------------------------------------------------------------------------------
 """This module contains the tests of the dialogue classes of the http_echo skill."""
 
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 
 from aea.test_tools.test_skill import COUNTERPARTY_AGENT_ADDRESS, BaseSkillTestCase
 
-from packages.eightballer.protocols.default.message import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.metrics.dialogues import (
-    DefaultDialogue,
-    DefaultDialogues,
     HttpDialogue,
     HttpDialogues,
+    DefaultDialogue,
+    DefaultDialogues,
 )
+from packages.eightballer.protocols.default.message import DefaultMessage
+
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
@@ -45,12 +46,8 @@ class TestDialogues(BaseSkillTestCase):
     def setup(cls):  # pylint: disable=W0221
         """Setup the test class."""
         super().setup_class()
-        cls.default_dialogues = cast(
-            DefaultDialogues, cls._skill.skill_context.default_dialogues
-        )
-        cls.http_dialogues = cast(
-            HttpDialogues, cls._skill.skill_context.http_dialogues
-        )
+        cls.default_dialogues = cast(DefaultDialogues, cls._skill.skill_context.default_dialogues)
+        cls.http_dialogues = cast(HttpDialogues, cls._skill.skill_context.http_dialogues)
 
     def test_default_dialogues(self):
         """Test the DefaultDialogues class."""

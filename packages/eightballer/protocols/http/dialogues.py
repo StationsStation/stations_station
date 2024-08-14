@@ -25,11 +25,11 @@ This module contains the classes required for http dialogue management.
 """
 
 from abc import ABC
-from typing import Callable, Dict, FrozenSet, Type, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.protocols.base import Message
-from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
+from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.http.message import HttpMessage
 
@@ -37,16 +37,10 @@ from packages.eightballer.protocols.http.message import HttpMessage
 class HttpDialogue(Dialogue):
     """The http dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {HttpMessage.Performative.REQUEST}
-    )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {HttpMessage.Performative.RESPONSE}
-    )
+    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({HttpMessage.Performative.REQUEST})
+    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({HttpMessage.Performative.RESPONSE})
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
-        HttpMessage.Performative.REQUEST: frozenset(
-            {HttpMessage.Performative.RESPONSE}
-        ),
+        HttpMessage.Performative.REQUEST: frozenset({HttpMessage.Performative.RESPONSE}),
         HttpMessage.Performative.RESPONSE: frozenset(),
     }
 

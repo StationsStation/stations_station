@@ -20,28 +20,37 @@
 # ------------------------------------------------------------------------------
 """HTTP server connection, channel, server, and handler."""
 
-import asyncio
-import email
-import logging
 import ssl
+import email
+import asyncio
+import logging
 from abc import ABC, abstractmethod
+from textwrap import dedent
+from typing import Any, Dict, Optional, cast
 from asyncio import CancelledError
+from traceback import format_exc
+from urllib.parse import parse_qs, urlparse
 from asyncio.events import AbstractEventLoop
 from asyncio.futures import Future
-from concurrent.futures._base import CancelledError as FuturesCancelledError
-from traceback import format_exc
-from typing import Any, Dict, Optional, cast
-from urllib.parse import parse_qs, urlparse
+from concurrent.futures._base import CancelledError as FuturesCancelledError  # noqa
 
-from aea.common import Address
-from aea.configurations.base import PublicId
-from aea.connections.base import Connection, ConnectionStates
-from aea.mail.base import Envelope, Message
-from aea.protocols.dialogue.base import Dialogue as BaseDialogue
-from aea.protocols.dialogue.base import DialogueLabel
 from aiohttp import web
-from aiohttp.web_request import BaseRequest
+from aea.common import Address
 from openapi_core import create_spec
+from aea.mail.base import Message, Envelope
+from aiohttp.web_request import BaseRequest
+from aea.connections.base import Connection, ConnectionStates
+from aea.configurations.base import PublicId
+from werkzeug.datastructures import (
+    ImmutableMultiDict,  # pylint: disable=wrong-import-order
+)
+from aea.protocols.dialogue.base import Dialogue as BaseDialogue, DialogueLabel
+from openapi_spec_validator.schemas import (
+    read_yaml_file,  # pylint: disable=wrong-import-order
+)
+from openapi_spec_validator.exceptions import (
+    OpenAPIValidationError,  # pylint: disable=wrong-import-order
+)
 from openapi_core.validation.request.datatypes import (
     Headers,
     OpenAPIRequest,
@@ -49,21 +58,13 @@ from openapi_core.validation.request.datatypes import (
 )
 from openapi_core.validation.request.shortcuts import validate_request
 from openapi_core.validation.request.validators import RequestValidator
-from openapi_spec_validator.exceptions import (
-    OpenAPIValidationError,  # pylint: disable=wrong-import-order
-)
-from openapi_spec_validator.schemas import (
-    read_yaml_file,  # pylint: disable=wrong-import-order
-)
-from werkzeug.datastructures import (
-    ImmutableMultiDict,  # pylint: disable=wrong-import-order
-)
 
-from packages.eightballer.protocols.http.dialogues import HttpDialogue
+from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import (
+    HttpDialogue,
     HttpDialogues as BaseHttpDialogues,
 )
-from packages.eightballer.protocols.http.message import HttpMessage
+
 
 SUCCESS = 200
 NOT_FOUND = 404
@@ -140,9 +141,7 @@ class Request(OpenAPIRequest):
         self._id = request_id
 
     @classmethod
-    async def create(
-        cls, http_request: BaseRequest, extra_headers: Dict[str, str] = None
-    ) -> "Request":
+    async def create(cls, http_request: BaseRequest, extra_headers: Dict[str, str] = None) -> "Request":
         """
         Create a request.
 
@@ -228,9 +227,7 @@ class Response(web.Response):
         """
         if http_message.performative == HttpMessage.Performative.RESPONSE:
             if http_message.is_set("headers") and http_message.headers:
-                headers: Optional[dict] = dict(
-                    email.message_from_string(http_message.headers).items()
-                )
+                headers: Optional[dict] = dict(email.message_from_string(http_message.headers).items())
             else:
                 headers = None
 
@@ -275,13 +272,9 @@ class APISpec:
                 api_spec = create_spec(api_spec_dict)
                 self._validator = RequestValidator(api_spec)
             except OpenAPIValidationError as error:
-                self.logger.error(
-                    f"API specification YAML source file not correctly formatted: {str(error)}"
-                )
+                self.logger.error(f"API specification YAML source file not correctly formatted: {str(error)}")
             except Exception:
-                self.logger.exception(
-                    "API specification YAML source file not correctly formatted."
-                )
+                self.logger.exception("API specification YAML source file not correctly formatted.")
                 raise
 
     def verify(self, request: Request) -> bool:
@@ -435,9 +428,7 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
             except Exception:  # pragma: nocover # pylint: disable=broad-except
                 self.is_stopped = True
                 self._in_queue = None
-                self.logger.exception(
-                    f"Failed to start server on {self.host}:{self.port}."
-                )
+                self.logger.exception(f"Failed to start server on {self.host}:{self.port}.")
 
     async def _http_handler(self, http_request: BaseRequest) -> Response:
         """
@@ -459,9 +450,7 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
 
         try:
             # turn request into envelope
-            envelope = request.to_envelope_and_set_id(
-                self._dialogues, self.target_skill_id
-            )
+            envelope = request.to_envelope_and_set_id(self._dialogues, self.target_skill_id)
 
             self.pending_requests[request.id] = Future()
 
@@ -478,19 +467,18 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
 
         except asyncio.TimeoutError:
             self.logger.warning(
-                f"Request timed out! Request={request} not handled as a result. "
-                + f"Ensure requests (protocol_id={HttpMessage.protocol_id}) are handled by a skill!"
-            )
+                dedent(
+                    f"""
+                    Request timed out! Request={request} not handled as a result.
+                    Ensure requests (protocol_id={HttpMessage.protocol_id}) are handled by a skill!
+                    """
+            ))
             return Response(status=REQUEST_TIMEOUT, reason="Request Timeout")
         except FuturesCancelledError:
-            return Response(
-                status=SERVER_ERROR, reason="Server terminated unexpectedly."
-            )  # pragma: nocover
+            return Response(status=SERVER_ERROR, reason="Server terminated unexpectedly.")  # pragma: nocover
         except BaseException:  # pragma: nocover # pylint: disable=broad-except
             self.logger.exception("Error during handling incoming request")
-            return Response(
-                status=SERVER_ERROR, reason="Server Error", text=format_exc()
-            )
+            return Response(status=SERVER_ERROR, reason="Server Error", text=format_exc())
         finally:
             if request.is_id_set:
                 self.pending_requests.pop(request.id, None)
@@ -504,9 +492,7 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
         if self.ssl_cert_path and self.ssl_key_path:
             ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
             ssl_context.load_cert_chain(self.ssl_cert_path, self.ssl_key_path)
-        self.http_server = web.TCPSite(
-            runner, self.host, self.port, ssl_context=ssl_context
-        )
+        self.http_server = web.TCPSite(runner, self.host, self.port, ssl_context=ssl_context)
         await self.http_server.start()
 
     def send(self, envelope: Envelope) -> None:
@@ -529,9 +515,9 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
 
         if not future:
             self.logger.warning(
-                f"Dropping message={message} for "
-                + f"incomplete_dialogue_label={dialogue.incomplete_dialogue_label} which has timed out."
-            )
+                dedent(f"""Dropping message={message} for:
+                           incomplete_dialogue_label={dialogue.incomplete_dialogue_label} 
+                           which has timed out."""))
             return
         if not future.done():
             future.set_result(message)
@@ -562,17 +548,13 @@ class HTTPServerConnection(Connection):
         super().__init__(**kwargs)
         host = cast(Optional[str], self.configuration.config.get("host"))
         port = cast(Optional[int], self.configuration.config.get("port"))
-        target_skill_id_ = cast(
-            Optional[str], self.configuration.config.get("target_skill_id")
-        )
+        target_skill_id_ = cast(Optional[str], self.configuration.config.get("target_skill_id"))
         if host is None or port is None or target_skill_id_ is None:  # pragma: nocover
             raise ValueError("host and port and target_skill_id must be set!")
         target_skill_id = PublicId.try_from_str(target_skill_id_)
         if target_skill_id is None:  # pragma: nocover
             raise ValueError("Provided target_skill_id is not a valid public id.")
-        api_spec_path = cast(
-            Optional[str], self.configuration.config.get("api_spec_path")
-        )
+        api_spec_path = cast(Optional[str], self.configuration.config.get("api_spec_path"))
         ssl_cert_path = cast(Optional[str], self.configuration.config.get("ssl_cert"))
         ssl_key_path = cast(Optional[str], self.configuration.config.get("ssl_key"))
 

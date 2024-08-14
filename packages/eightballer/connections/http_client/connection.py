@@ -19,34 +19,33 @@
 # ------------------------------------------------------------------------------
 """HTTP client connection and channel."""
 
-import asyncio
-import email
-import logging
 import ssl
+import email
+import asyncio
+import logging
+from typing import Any, Set, Tuple, Optional, cast
 from asyncio import CancelledError
-from asyncio.events import AbstractEventLoop
-from asyncio.tasks import Task
 from traceback import format_exc
-from typing import Any, Optional, Set, Tuple, cast
+from asyncio.tasks import Task
+from asyncio.events import AbstractEventLoop
 
 import aiohttp
 import certifi  # pylint: disable=wrong-import-order
-from aea.common import Address
-from aea.configurations.base import PublicId
-from aea.connections.base import Connection, ConnectionStates
-from aea.exceptions import enforce
-from aea.mail.base import Envelope, Message
-from aea.protocols.dialogue.base import Dialogue as BaseDialogue
-from aiohttp.client_reqrep import ClientResponse
 from multidict import CIMultiDict, CIMultiDictProxy
+from aea.common import Address
+from aea.mail.base import Message, Envelope
+from aea.exceptions import enforce
+from aea.connections.base import Connection, ConnectionStates
+from aiohttp.client_reqrep import ClientResponse
+from aea.configurations.base import PublicId
+from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
+from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
-)
-from packages.eightballer.protocols.http.dialogues import (
     HttpDialogues as BaseHttpDialogues,
 )
-from packages.eightballer.protocols.http.message import HttpMessage
+
 
 SUCCESS = 200
 NOT_FOUND = 404
@@ -108,9 +107,7 @@ class HTTPClientAsyncChannel:
     """A wrapper for a HTTPClient."""
 
     DEFAULT_TIMEOUT = 300  # default timeout in seconds
-    DEFAULT_EXCEPTION_CODE = (
-        600  # custom code to indicate there was exception during request
-    )
+    DEFAULT_EXCEPTION_CODE = 600  # custom code to indicate there was exception during request
 
     def __init__(
         self,
@@ -151,9 +148,7 @@ class HTTPClientAsyncChannel:
         self._in_queue = asyncio.Queue()
         self.is_stopped = False
 
-    def _get_message_and_dialogue(
-        self, envelope: Envelope
-    ) -> Tuple[HttpMessage, Optional[HttpDialogue]]:
+    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[HttpMessage, Optional[HttpDialogue]]:
         """
         Get a message copy and dialogue related to this message.
 
@@ -174,14 +169,10 @@ class HTTPClientAsyncChannel:
         if not self._loop:  # pragma: nocover
             raise ValueError("Channel is not connected")
 
-        request_http_message, dialogue = self._get_message_and_dialogue(
-            request_envelope
-        )
+        request_http_message, dialogue = self._get_message_and_dialogue(request_envelope)
 
         if not dialogue:
-            self.logger.warning(
-                "Could not create dialogue for message={}".format(request_http_message)
-            )
+            self.logger.warning("Could not create dialogue for message={}".format(request_http_message))
             return
 
         try:
@@ -194,12 +185,15 @@ class HTTPClientAsyncChannel:
                 status_code=resp.status,
                 headers=resp.headers,
                 status_text=resp.reason,
-                body=resp._body  # pylint: disable=protected-access
-                if resp._body is not None  # pylint: disable=protected-access
+                body=resp._body  # noqa
+                if resp._body is not None  # noqa
                 else b"",
                 dialogue=dialogue,
             )
-        except Exception:  # pylint: disable=broad-except
+        except Exception:  # noqa
+            self.logger.exception(
+                f"Exception raised during http call: {request_http_message.method} {request_http_message.url}"
+            )
             envelope = self.to_envelope(
                 request_http_message,
                 status_code=self.DEFAULT_EXCEPTION_CODE,
@@ -212,9 +206,7 @@ class HTTPClientAsyncChannel:
         if self._in_queue is not None:
             await self._in_queue.put(envelope)
 
-    async def _perform_http_request(
-        self, request_http_message: HttpMessage
-    ) -> ClientResponse:
+    async def _perform_http_request(self, request_http_message: HttpMessage) -> ClientResponse:
         """
         Perform http request and return response.
 
@@ -224,9 +216,7 @@ class HTTPClientAsyncChannel:
         """
         try:
             if request_http_message.is_set("headers") and request_http_message.headers:
-                headers: Optional[dict] = dict(
-                    email.message_from_string(request_http_message.headers).items()
-                )
+                headers: Optional[dict] = dict(email.message_from_string(request_http_message.headers).items())
             else:
                 headers = None
             async with aiohttp.ClientSession() as session:
@@ -270,12 +260,8 @@ class HTTPClientAsyncChannel:
 
         request_http_message = cast(HttpMessage, request_envelope.message)
 
-        if (
-            request_http_message.performative != HttpMessage.Performative.REQUEST
-        ):  # pragma: nocover
-            self.logger.warning(
-                "The HTTPMessage performative must be a REQUEST. Envelop dropped."
-            )
+        if request_http_message.performative != HttpMessage.Performative.REQUEST:  # pragma: nocover
+            self.logger.warning("The HTTPMessage performative must be a REQUEST. Envelop dropped.")
             return
 
         task = self._loop.create_task(self._http_request_task(request_envelope))
@@ -317,7 +303,8 @@ class HTTPClientAsyncChannel:
         dialogue: HttpDialogue,
     ) -> Envelope:
         """
-        Convert an HTTP response object (from the 'requests' library) into an Envelope containing an HttpMessage (from the 'http' Protocol).
+        Convert an HTTP response object (from the 'requests' library) into an 
+        Envelope containing an HttpMessage (from the 'http' Protocol).
 
         :param http_request_message: the message of the http request envelop
         :param status_code: the http status code, int
@@ -356,8 +343,8 @@ class HTTPClientAsyncChannel:
                 await task
             except KeyboardInterrupt:  # pragma: nocover
                 raise
-            except BaseException:  # pragma: nocover # pylint: disable=broad-except
-                pass  # nosec
+            except BaseException as error:
+                self.connection.logger.exception(f"Exception on task cancel: {error}")
 
     async def disconnect(self) -> None:
         """Disconnect."""

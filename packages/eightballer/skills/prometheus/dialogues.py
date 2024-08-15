@@ -21,19 +21,20 @@
 
 from typing import Any
 
+from aea.skills.base import Model
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
-from aea.skills.base import Model
 
+from packages.valory.protocols.http.message import HttpMessage
+from packages.valory.protocols.http.dialogues import (
+    HttpDialogue as BaseHttpDialogue,
+    HttpDialogues as BaseHttpDialogues,
+)
 from packages.eightballer.protocols.prometheus.dialogues import (
     PrometheusDialogue as BasePrometheusDialogue,
-)
-from packages.eightballer.protocols.prometheus.dialogues import (
     PrometheusDialogues as BasePrometheusDialogues,
 )
-from packages.valory.protocols.http.dialogues import HttpDialogue as BaseHttpDialogue
-from packages.valory.protocols.http.dialogues import HttpDialogues as BaseHttpDialogues
-from packages.valory.protocols.http.message import HttpMessage
+
 
 HttpDialogue = BaseHttpDialogue
 PrometheusDialogue = BasePrometheusDialogue
@@ -50,7 +51,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
         """
         Model.__init__(self, **kwargs)
 
-        def role_from_first_message(  # pylint: disable=unused-argument
+        def role_from_first_message(  # noqa
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
             """Infer the role of the agent from an incoming/outgoing first message
@@ -59,12 +60,8 @@ class HttpDialogues(Model, BaseHttpDialogues):
             :param receiver_address: the address of the receiving agent
             :return: The role of the agent in this dialogue
             """
-            if (
-                message.performative == HttpMessage.Performative.REQUEST
-                and message.sender != receiver_address
-            ) or (
-                message.performative == HttpMessage.Performative.RESPONSE
-                and message.sender == receiver_address
+            if (message.performative == HttpMessage.Performative.REQUEST and message.sender != receiver_address) or (
+                message.performative == HttpMessage.Performative.RESPONSE and message.sender == receiver_address
             ):
                 return BaseHttpDialogue.Role.SERVER
 
@@ -100,6 +97,7 @@ class PrometheusDialogues(Model, BasePrometheusDialogues):
             :param receiver_address: the address of the receiving agent
             :return: The role of the agent
             """
+            del receiver_address, message
             return PrometheusDialogue.Role.AGENT
 
         BasePrometheusDialogues.__init__(

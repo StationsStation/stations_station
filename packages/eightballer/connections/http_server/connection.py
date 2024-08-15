@@ -25,9 +25,9 @@ import email
 import asyncio
 import logging
 from abc import ABC, abstractmethod
-from textwrap import dedent
 from typing import Any, Dict, Optional, cast
 from asyncio import CancelledError
+from textwrap import dedent
 from traceback import format_exc
 from urllib.parse import parse_qs, urlparse
 from asyncio.events import AbstractEventLoop
@@ -42,15 +42,15 @@ from aiohttp.web_request import BaseRequest
 from aea.connections.base import Connection, ConnectionStates
 from aea.configurations.base import PublicId
 from werkzeug.datastructures import (
-    ImmutableMultiDict,  # pylint: disable=wrong-import-order
-)
+    ImmutableMultiDict,
+)  # pylint: disable=wrong-import-order
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue, DialogueLabel
 from openapi_spec_validator.schemas import (
-    read_yaml_file,  # pylint: disable=wrong-import-order
-)
+    read_yaml_file,
+)  # pylint: disable=wrong-import-order
 from openapi_spec_validator.exceptions import (
-    OpenAPIValidationError,  # pylint: disable=wrong-import-order
-)
+    OpenAPIValidationError,
+)  # pylint: disable=wrong-import-order
 from openapi_core.validation.request.datatypes import (
     Headers,
     OpenAPIRequest,
@@ -359,7 +359,7 @@ class BaseAsyncChannel(ABC):
 class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attributes
     """A wrapper for an RESTful API with an internal HTTPServer."""
 
-    RESPONSE_TIMEOUT = 15.0
+    RESPONSE_TIMEOUT = 150.0
 
     def __init__(
         self,
@@ -467,12 +467,11 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
 
         except asyncio.TimeoutError:
             self.logger.warning(
-                dedent(
-                    f"""
-                    Request timed out! Request={request} not handled as a result.
-                    Ensure requests (protocol_id={HttpMessage.protocol_id}) are handled by a skill!
-                    """
-            ))
+                dedent(f"""
+                        Request timed out! Request={request} not handled as a result. "
+                        Ensure requests (protocol_id={HttpMessage.protocol_id}) are handled by a skill!"
+                        """)
+            )
             return Response(status=REQUEST_TIMEOUT, reason="Request Timeout")
         except FuturesCancelledError:
             return Response(status=SERVER_ERROR, reason="Server terminated unexpectedly.")  # pragma: nocover
@@ -515,9 +514,11 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
 
         if not future:
             self.logger.warning(
-                dedent(f"""Dropping message={message} for:
-                           incomplete_dialogue_label={dialogue.incomplete_dialogue_label} 
-                           which has timed out."""))
+                dedent(f"""
+                       Dropping message={message} for "
+                       incomplete_dialogue_label={dialogue.incomplete_dialogue_label} which has timed out."
+                        """)
+            )
             return
         if not future.done():
             future.set_result(message)

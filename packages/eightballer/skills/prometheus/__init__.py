@@ -21,4 +21,5 @@
 
 from aea.configurations.base import PublicId
 
+
 PUBLIC_ID = PublicId.from_str("eightballer/prometheus:0.1.0")

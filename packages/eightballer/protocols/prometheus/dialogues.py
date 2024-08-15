@@ -25,11 +25,11 @@ This module contains the classes required for prometheus dialogue management.
 """
 
 from abc import ABC
-from typing import Callable, Dict, FrozenSet, Type, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.protocols.base import Message
-from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
+from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.prometheus.message import PrometheusMessage
 
@@ -43,17 +43,11 @@ class PrometheusDialogue(Dialogue):
             PrometheusMessage.Performative.UPDATE_METRIC,
         }
     )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {PrometheusMessage.Performative.RESPONSE}
-    )
+    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({PrometheusMessage.Performative.RESPONSE})
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
-        PrometheusMessage.Performative.ADD_METRIC: frozenset(
-            {PrometheusMessage.Performative.RESPONSE}
-        ),
+        PrometheusMessage.Performative.ADD_METRIC: frozenset({PrometheusMessage.Performative.RESPONSE}),
         PrometheusMessage.Performative.RESPONSE: frozenset(),
-        PrometheusMessage.Performative.UPDATE_METRIC: frozenset(
-            {PrometheusMessage.Performative.RESPONSE}
-        ),
+        PrometheusMessage.Performative.UPDATE_METRIC: frozenset({PrometheusMessage.Performative.RESPONSE}),
     }
 
     class Role(Dialogue.Role):

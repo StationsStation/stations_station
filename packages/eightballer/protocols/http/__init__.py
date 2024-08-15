@@ -24,10 +24,10 @@ This module contains the support resources for the http protocol.
 It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea version `1.8.0`.
 """
 
-from packages.eightballer.protocols.http.dialogues import HttpDialogue as Dialogue
-from packages.eightballer.protocols.http.dialogues import HttpDialogues as Dialogues
 from packages.eightballer.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.http.dialogues import HttpDialogue as Dialogue, HttpDialogues as Dialogues
 from packages.eightballer.protocols.http.serialization import HttpSerializer
+
 
 HttpDialogue = Dialogue
 HttpDialogues = Dialogues

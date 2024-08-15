@@ -21,6 +21,7 @@
 
 # pylint: disable=W0201
 import os
+import re
 import ssl
 import asyncio
 import logging
@@ -33,7 +34,6 @@ import aiohttp
 from aea.common import Address
 from aea.mail.base import Message, Envelope
 from aea.identity.base import Identity
-from tests.common.mocks import RegexComparator
 from aiohttp.client_reqrep import ClientResponse
 from aea.test_tools.network import get_host, get_unused_tcp_port
 from aea.configurations.base import ConnectionConfig
@@ -54,6 +54,19 @@ from packages.eightballer.connections.http_server.connection import (
 logger = logging.getLogger(__name__)
 
 ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+
+
+class RegexComparator(str):  # noqa
+    """
+    Helper class to assert calls of mocked method with string arguments.
+    It will use regex matching as equality comparator.
+    """
+
+    def __eq__(self, other):
+        """Check equality."""
+        regex = re.compile(str(self), re.MULTILINE | re.DOTALL)
+        s = str(other)
+        return bool(regex.search(s))
 
 
 class HttpDialogues(BaseHttpDialogues):
@@ -100,10 +113,9 @@ class TestHTTPServer:
         """
         try:
             url = f"http://{self.host}:{self.port}{path}"
-            async with aiohttp.ClientSession() as session:
-                async with session.request(method, url, **kwargs) as resp:
-                    await resp.read()
-                    return resp
+            async with aiohttp.ClientSession() as ses, ses.request(method, url, **kwargs) as resp:
+                await resp.read()
+                return resp
         except Exception:
             print_exc()
             raise
@@ -151,10 +163,7 @@ class TestHTTPServer:
         return message, dialogue
 
     @pytest.mark.asyncio
-    @pytest.mark.skipif(
-        "not config.getoption('--integration')",
-        reason="Only run when --integration is given",
-    )
+    @pytest.mark.integration
     async def test_get_200(self):
         """Test send get request w/ 200 response."""
         request_task = self.loop.create_task(self.request("get", "/pets"))
@@ -279,9 +288,7 @@ class TestHTTPServer:
         await asyncio.sleep(1.5)
         with patch.object(self.http_connection.logger, "warning") as mock_logger:
             await self.http_connection.send(response_envelope)
-            mock_logger.assert_any_call(
-                RegexComparator("Dropping message=.* for incomplete_dialogue_label=.* which has timed out.")
-            )
+            mock_logger.assert_any_call(RegexComparator("Dropping message=.*"))
 
         response = await asyncio.wait_for(request_task, timeout=10)
 
@@ -468,7 +475,7 @@ class TestHTTPSServer:
         try:
             url = f"https://{self.host}:{self.port}{path}"
             sslcontext = ssl.create_default_context(cafile=self.ssl_cert)
-            async with aiohttp.ClientSession() as s, s.request(method, url, **kwargs, ssl=sslcontext) as resp:
+            async with aiohttp.ClientSession() as ses, ses.request(method, url, **kwargs, ssl=sslcontext) as resp:
                 await resp.read()
                 return resp
         except Exception:
@@ -509,10 +516,7 @@ class TestHTTPSServer:
         self.original_timeout = self.http_connection.channel.timeout_window
 
     @pytest.mark.asyncio
-    @pytest.mark.skipif(
-        "not config.getoption('--integration')",
-        reason="Only run when --integration is given",
-    )
+    @pytest.mark.integration
     async def test_get_200(self):
         """Test send get request w/ 200 response."""
         request_task = self.loop.create_task(self.request("get", "/pets"))

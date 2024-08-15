@@ -185,9 +185,7 @@ class HTTPClientAsyncChannel:
                 status_code=resp.status,
                 headers=resp.headers,
                 status_text=resp.reason,
-                body=resp._body  # noqa
-                if resp._body is not None  # noqa
-                else b"",
+                body=resp._body if resp._body is not None else b"",  # noqa  # noqa
                 dialogue=dialogue,
             )
         except Exception:  # noqa
@@ -303,7 +301,7 @@ class HTTPClientAsyncChannel:
         dialogue: HttpDialogue,
     ) -> Envelope:
         """
-        Convert an HTTP response object (from the 'requests' library) into an 
+        Convert an HTTP response object (from the 'requests' library) into an
         Envelope containing an HttpMessage (from the 'http' Protocol).
 
         :param http_request_message: the message of the http request envelop

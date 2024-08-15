@@ -13,3 +13,6 @@ keys.json
 
 agent/
 service/
+
+packages/open_aea/protocols/signing
+packages/valory/protocols/http

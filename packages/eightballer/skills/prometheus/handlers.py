@@ -22,17 +22,17 @@
 import json
 from typing import Any, Dict, Optional, SupportsFloat, cast
 
-from aea.protocols.base import Message
 from aea.skills.base import Handler
+from aea.protocols.base import Message
 
-from packages.eightballer.protocols.prometheus.message import PrometheusMessage
+from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.prometheus.dialogues import (
     HttpDialogue,
     HttpDialogues,
     PrometheusDialogue,
     PrometheusDialogues,
 )
-from packages.valory.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.prometheus.message import PrometheusMessage
 
 
 class PrometheusHandler(Handler):
@@ -53,20 +53,14 @@ class PrometheusHandler(Handler):
         message = cast(PrometheusMessage, message)
 
         # recover dialogue
-        prometheus_dialogues = cast(
-            PrometheusDialogues, self.context.prometheus_dialogues
-        )
-        prometheus_dialogue = cast(
-            PrometheusDialogue, prometheus_dialogues.update(message)
-        )
+        prometheus_dialogues = cast(PrometheusDialogues, self.context.prometheus_dialogues)
+        prometheus_dialogue = cast(PrometheusDialogue, prometheus_dialogues.update(message))
         if prometheus_dialogue is None:
             self._handle_unidentified_dialogue(message)
             return
 
         if message.performative == PrometheusMessage.Performative.RESPONSE:
-            self.context.logger.debug(
-                f"Prometheus response ({message.code}): {message.message}"
-            )
+            self.context.logger.debug(f"Prometheus response ({message.code}): {message.message}")
         else:  # pragma: nocover
             self.context.logger.debug(
                 f"got unexpected prometheus message: Performative = {PrometheusMessage.Performative}"
@@ -79,9 +73,7 @@ class PrometheusHandler(Handler):
         :param msg: the unidentified message to be handled
         """
 
-        self.context.logger.info(
-            "received invalid message={}, unidentified dialogue.".format(msg)
-        )
+        self.context.logger.info("received invalid message={}, unidentified dialogue.".format(msg))
 
     def teardown(self) -> None:
         """Teardown the handler."""
@@ -139,17 +131,12 @@ class HttpHandler(Handler):
             self._handle_unidentified_dialogue(message)
             return
 
-        if (
-            message.performative == HttpMessage.Performative.RESPONSE
-            and message.status_code == 200
-        ):
+        if message.performative == HttpMessage.Performative.RESPONSE and message.status_code == 200:
             self._handle_response(message)
         elif message.performative == HttpMessage.Performative.REQUEST:
             self._handle_request(message, http_dialogue)
         else:
-            self.context.logger.info(
-                f"got unexpected http message: code = {message.status_code}"
-            )
+            self.context.logger.info(f"got unexpected http message: code = {message.status_code}")
 
     def _handle_response(self, http_msg: HttpMessage) -> None:
         """
@@ -173,15 +160,11 @@ class HttpHandler(Handler):
             if is_number(value):
                 float_value = float(value)
                 int_value = int(float_value * 10**model.decimals)
-                observation = {
-                    output["name"]: {"value": int_value, "decimals": model.decimals}
-                }
+                observation = {output["name"]: {"value": int_value, "decimals": model.decimals}}
             elif isinstance(value, str):
                 observation = {output["name"]: {"value": value}}
             else:
-                self.context.logger.warning(
-                    f"No valid output for {output['name']} found in response."
-                )
+                self.context.logger.warning(f"No valid output for {output['name']} found in response.")
                 continue
             success = True
             self.context.shared_state.update(observation)
@@ -193,9 +176,7 @@ class HttpHandler(Handler):
                 metric_name, "inc", 1.0, {}
             )
 
-    def _handle_request(
-        self, http_msg: HttpMessage, http_dialogue: HttpDialogue
-    ) -> None:
+    def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """
         Handle a Http request.
 
@@ -224,11 +205,7 @@ class HttpHandler(Handler):
         """
         model = self.context.data_request_model
         outputs = [output["name"] for output in model.outputs]
-        data = {
-            key: value
-            for (key, value) in self.context.shared_state.items()
-            if key in outputs
-        }
+        data = {key: value for (key, value) in self.context.shared_state.items() if key in outputs}
 
         http_response = http_dialogue.reply(
             performative=HttpMessage.Performative.RESPONSE,
@@ -244,9 +221,7 @@ class HttpHandler(Handler):
 
         if self.context.prometheus_dialogues.enabled:
             metric_name = "num_requests"
-            self.context.behaviours.prometheus_behaviour.update_prometheus_metric(
-                metric_name, "inc", 1.0, {}
-            )
+            self.context.behaviours.prometheus_behaviour.update_prometheus_metric(metric_name, "inc", 1.0, {})
 
     def _handle_unidentified_dialogue(self, msg: Message) -> None:
         """
@@ -254,9 +229,7 @@ class HttpHandler(Handler):
 
         :param msg: the unidentified message to be handled
         """
-        self.context.logger.info(
-            "received invalid message={}, unidentified dialogue.".format(msg)
-        )
+        self.context.logger.info("received invalid message={}, unidentified dialogue.".format(msg))
 
     def teardown(self) -> None:
         """Teardown the handler."""

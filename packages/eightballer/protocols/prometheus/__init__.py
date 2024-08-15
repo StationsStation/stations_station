@@ -26,4 +26,5 @@ It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea 
 from packages.eightballer.protocols.prometheus.message import PrometheusMessage
 from packages.eightballer.protocols.prometheus.serialization import PrometheusSerializer
 
+
 PrometheusMessage.serializer = PrometheusSerializer

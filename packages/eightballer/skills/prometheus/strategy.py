@@ -23,6 +23,7 @@ from typing import Any
 
 from aea.skills.base import Model
 
+
 DEFAULT_URL = ""
 DEFAULT_METHOD = "GET"
 DEFAULT_BODY = ""
@@ -53,7 +54,7 @@ class DataRequestModel(Model):
 
         self._validate_config()
 
-    def _validate_config(self) -> None:  # pragma: nocover
+    def _validate_config(self) -> None:  # noqa
         """Ensure the configuration settings are all valid."""
         msg = []
         if not isinstance(self.url, str):
@@ -65,7 +66,7 @@ class DataRequestModel(Model):
         if not isinstance(self.outputs, list):
             msg.append("outputs must be provided as a list")
         else:
-            for (ind, output) in enumerate(self.outputs):
+            for ind, output in enumerate(self.outputs):
                 if not isinstance(output, dict):
                     msg.append(f"output {ind} must be a dict")
                 else:

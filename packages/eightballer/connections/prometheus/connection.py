@@ -21,21 +21,22 @@
 
 import asyncio
 import logging
-from typing import Any, Optional, Tuple, Union, cast
+from typing import Any, Tuple, Union, Optional, cast
 
 import aioprometheus  # type: ignore
 from aea.common import Address
-from aea.configurations.base import PublicId
-from aea.connections.base import Connection, ConnectionStates
+from aea.mail.base import Message, Envelope
 from aea.exceptions import enforce
-from aea.mail.base import Envelope, Message
+from aea.connections.base import Connection, ConnectionStates
+from aea.configurations.base import PublicId
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
-from packages.eightballer.protocols.prometheus.dialogues import PrometheusDialogue
+from packages.eightballer.protocols.prometheus.message import PrometheusMessage
 from packages.eightballer.protocols.prometheus.dialogues import (
+    PrometheusDialogue,
     PrometheusDialogues as BasePrometheusDialogues,
 )
-from packages.eightballer.protocols.prometheus.message import PrometheusMessage
+
 
 PUBLIC_ID = PublicId.from_str("eightballer/prometheus:0.1.1")
 
@@ -64,7 +65,7 @@ class PrometheusDialogues(BasePrometheusDialogues):
             :param receiver_address: the address of the receiving agent
             :return: The role of the agent
             """
-            del receiver_address
+            del receiver_address, message
             return PrometheusDialogue.Role.SERVER
 
         BasePrometheusDialogues.__init__(
@@ -103,9 +104,7 @@ class PrometheusChannel:
         self._port = port
         self._service = aioprometheus.Service()
 
-    def _get_message_and_dialogue(
-        self, envelope: Envelope
-    ) -> Tuple[PrometheusMessage, Optional[PrometheusDialogue]]:
+    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[PrometheusMessage, Optional[PrometheusDialogue]]:
         """
         Get a message copy and dialogue related to this message.
 
@@ -141,13 +140,8 @@ class PrometheusChannel:
         """
         sender = envelope.sender
         self.logger.debug("Processing message from {}: {}".format(sender, envelope))
-        if (
-            envelope.protocol_specification_id
-            != PrometheusMessage.protocol_specification_id
-        ):
-            raise ValueError(
-                f"Protocol {envelope.protocol_specification_id} is not valid for prometheus."
-            )
+        if envelope.protocol_specification_id != PrometheusMessage.protocol_specification_id:
+            raise ValueError(f"Protocol {envelope.protocol_specification_id} is not valid for prometheus.")
         await self._handle_prometheus_message(envelope)
 
     async def _handle_prometheus_message(self, envelope: Envelope) -> None:
@@ -163,9 +157,7 @@ class PrometheusChannel:
         message, dialogue = self._get_message_and_dialogue(envelope)
 
         if dialogue is None:
-            self.logger.warning(
-                "Could not create dialogue from message={}".format(message)
-            )
+            self.logger.warning("Could not create dialogue from message={}".format(message))
             return
 
         if message.performative == PrometheusMessage.Performative.ADD_METRIC:
@@ -202,20 +194,14 @@ class PrometheusChannel:
                 response_code = 404
                 response_msg = f"{message.type} is not a recognized prometheus metric."
             else:
-                self.metrics[message.title] = metric_type(
-                    message.title, message.description, message.labels
-                )
+                self.metrics[message.title] = metric_type(message.title, message.description, message.labels)
                 self._service.register(self.metrics[message.title])
                 response_code = 200
-                response_msg = (
-                    f"New {message.type} successfully added: {message.title}."
-                )
+                response_msg = f"New {message.type} successfully added: {message.title}."
 
         return response_code, response_msg
 
-    async def _handle_update_metric(
-        self, message: PrometheusMessage
-    ) -> Tuple[int, str]:
+    async def _handle_update_metric(self, message: PrometheusMessage) -> Tuple[int, str]:
         """Handle update metric message.
 
         :param message: the message to handle.
@@ -229,9 +215,7 @@ class PrometheusChannel:
             update_func = getattr(self.metrics[metric], message.callable, None)
             if update_func is None:
                 response_code = 400
-                response_msg = (
-                    f"Update function {message.callable} not found for metric {metric}."
-                )
+                response_msg = f"Update function {message.callable} not found for metric {metric}."
             else:
                 if message.callable in VALID_UPDATE_FUNCS:
                     # Update the metric ("inc" and "dec" do not take "value" argument)
@@ -243,7 +227,9 @@ class PrometheusChannel:
                     response_msg = f"Metric {metric} successfully updated."
                 else:
                     response_code = 400
-                    response_msg = f"Failed to update metric {metric}: {message.callable} is not a valid update function."
+                    response_msg = (
+                        f"Failed to update metric {metric}: {message.callable} is not a valid update function."
+                    )
 
         return response_code, response_msg
 
@@ -281,9 +267,7 @@ class PrometheusConnection(Connection):
 
         self.host = cast(str, self.configuration.config.get("host", DEFAULT_HOST))
         self.port = cast(int, self.configuration.config.get("port", DEFAULT_PORT))
-        self.channel = PrometheusChannel(
-            self.address, self.host, self.port, self.logger
-        )
+        self.channel = PrometheusChannel(self.address, self.host, self.port, self.logger)
 
     async def connect(self) -> None:
         """Connect to prometheus server via prometheus channel."""

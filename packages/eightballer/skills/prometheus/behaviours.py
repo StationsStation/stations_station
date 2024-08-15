@@ -24,11 +24,11 @@ from typing import Dict, cast
 import psutil
 from aea.skills.behaviours import TickerBehaviour
 
+from packages.eightballer.skills.prometheus.dialogues import PrometheusDialogues
+from packages.eightballer.protocols.prometheus.message import PrometheusMessage
 from packages.eightballer.connections.prometheus.connection import (
     PUBLIC_ID as PROM_CONNECTION_ID,
 )
-from packages.eightballer.protocols.prometheus.message import PrometheusMessage
-from packages.eightballer.skills.prometheus.dialogues import PrometheusDialogues
 
 
 class PrometheusBehaviour(TickerBehaviour):
@@ -43,7 +43,7 @@ class PrometheusBehaviour(TickerBehaviour):
         if prom_dialogues.enabled:
             for metric in prom_dialogues.metrics:
                 metric_name = metric["name"]
-                self.context.logger.info("Adding Prometheus metric: " + metric_name)
+                self.context.logger.info(f"Adding Prometheus metric: {metric_name}")
                 self.add_prometheus_metric(
                     metric_name,
                     metric["type"],

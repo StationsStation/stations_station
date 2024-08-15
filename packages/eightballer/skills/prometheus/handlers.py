@@ -25,7 +25,7 @@ from typing import Any, Dict, Optional, SupportsFloat, cast
 from aea.skills.base import Handler
 from aea.protocols.base import Message
 
-from packages.valory.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.prometheus.dialogues import (
     HttpDialogue,
     HttpDialogues,

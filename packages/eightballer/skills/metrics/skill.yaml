@@ -12,14 +12,14 @@ fingerprint:
   dialogues.py: bafybeigmngosmm4kqcuajmc5avnrhlc65argdlimlc54zetcnf5r2r62my
   handlers.py: bafybeifpza7nwblsw5bqpu2yxcoo3ukenlc3oxnl65ojzwaokh55q3ahka
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_metrics.py: bafybeiecaxnjnni4pt5l34ka63amekgxvidhgiv2of5volnqab7ocug46m
+  tests/test_metrics.py: bafybeifcvrhrlnhnjwbjzedwoegkzfocptui5jkdycf7ydqed2ck76zes4
   tests/test_metrics_dialogues.py: bafybeign4wrziouuemo4cdw457qyyrhzbam62pggfcvfhxuqphj7ye5c4u
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeigle54ba23gdxmqtul7bwea5qkanflw3opqo3wu5nxq4sozz4cxc4
-- eightballer/http:0.1.0:bafybeid2sgxno3sfkkqf552pagfdfx7tbqypr2wdclp7bluid2fezonknm
+- eightballer/default:0.1.0:bafybeif3jvxr64yrl6qmsjy25kpg76lmvwzlpvln5g6v5gne366gjfwcvq
+- eightballer/http:0.1.0:bafybeieoom2ajzvurwsjbivx23dwilarfzkihgqpgqp43ypowpr5xdyjr4
 skills: []
 behaviours: {}
 handlers:

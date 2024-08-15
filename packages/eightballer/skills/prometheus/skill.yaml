@@ -6,18 +6,18 @@ description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeicb4zxa7sqqthjbymmltkgbruhyom5f57pdqihofzjmxshy363dd4
-  behaviours.py: bafybeier6sr3on77k6szlghbvzgd2z2l5jxi3atziykjkwnmcotlqknl4a
-  dialogues.py: bafybeiapq2xxo2dbhqgnzavjnadv4og2neezn3zt4cnlxnfzpk2jxbgb5i
-  handlers.py: bafybeifjkn3tewtokaex7ybxsyni4wmmboi6aoj65rezr6venst2xcanm4
-  strtaegy.py: bafybeig4f5jcqu532lq45fez6phbntlnlco4dkpox7sgrsyjli3ozd5a3m
+  __init__.py: bafybeibaobrbsfxe52oiqwqdw52drhymjx3eq4qvqz73izolj2omze56qe
+  behaviours.py: bafybeiatruff3rqouxefkptxqvm4ny3hgyq67frh3lqijkmo3yish5q63u
+  dialogues.py: bafybeie4wdqgbcd2v36ip5po3uhhgygihxzor4uqoncysfraq6prik7b4i
+  handlers.py: bafybeihy2qoevcf4gkpchhpyjpe5zhx6ntmciea4xixac7gao7eucynsee
+  strategy.py: bafybeihvtvzu4lp5ay5fye5472ucays7i7bnzesv6optof34guf5wegwpa
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/prometheus:0.1.1:bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca
+- eightballer/prometheus:0.1.1:bafybeihbtxxkcj7us236fnfyyn3rde65vk36yw5o3hbfjd5niabpa7ouom
 contracts: []
 protocols:
-- eightballer/prometheus:1.0.0:bafybeie3sy2m3ltmnkrldx4vux26xbyokay6eh7datiacr2ropqwj3r3ga
-- valory/http:1.0.0:bafybeieshrrplt5oadws5tz3rhjo6m2spchdyhkwa2z6ze2bs4ivauusfq
+- eightballer/prometheus:1.0.0:bafybeicjwq2wgka7g5dnn5dnuzstfzt5fbbgknvd5lwk7uzwtz3h6yg5du
+- eightballer/http:0.1.0:bafybeieoom2ajzvurwsjbivx23dwilarfzkihgqpgqp43ypowpr5xdyjr4
 skills: []
 behaviours:
   prometheus_behaviour:

@@ -39,10 +39,6 @@ from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import HttpDialogue, HttpDialogues
 from packages.eightballer.connections.http_client.connection import HTTPClientConnection
-from packages.eightballer.connections.http_server.connection import (
-    HTTPServerConnection,
-    headers_to_string,
-)
 
 
 logger = logging.getLogger(__name__)

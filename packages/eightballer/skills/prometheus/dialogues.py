@@ -25,8 +25,8 @@ from aea.skills.base import Model
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
-from packages.valory.protocols.http.message import HttpMessage
-from packages.valory.protocols.http.dialogues import (
+from packages.eightballer.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
     HttpDialogues as BaseHttpDialogues,
 )

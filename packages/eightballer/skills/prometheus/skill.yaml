@@ -8,12 +8,13 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibaobrbsfxe52oiqwqdw52drhymjx3eq4qvqz73izolj2omze56qe
   behaviours.py: bafybeiatruff3rqouxefkptxqvm4ny3hgyq67frh3lqijkmo3yish5q63u
-  dialogues.py: bafybeie4wdqgbcd2v36ip5po3uhhgygihxzor4uqoncysfraq6prik7b4i
+  dialogues.py: bafybeihkmhsz4krj4frk6u7pzagy2jqhy4bzzmsewn2a5ibf4t7hejygla
   handlers.py: bafybeihy2qoevcf4gkpchhpyjpe5zhx6ntmciea4xixac7gao7eucynsee
   strategy.py: bafybeihvtvzu4lp5ay5fye5472ucays7i7bnzesv6optof34guf5wegwpa
+  tests/test_skill.py: bafybeibbl5zncw3twdecgt47m65lkyr2nqnx7fzi2s4dupquip4zewzz5e
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/prometheus:0.1.1:bafybeihbtxxkcj7us236fnfyyn3rde65vk36yw5o3hbfjd5niabpa7ouom
+- eightballer/prometheus:0.1.1:bafybeibiy3nvia5xjvey5gmwv56vi4w7kjbbb5xcug2lwp4f7ylnfpw2wu
 contracts: []
 protocols:
 - eightballer/prometheus:1.0.0:bafybeicjwq2wgka7g5dnn5dnuzstfzt5fbbgknvd5lwk7uzwtz3h6yg5du

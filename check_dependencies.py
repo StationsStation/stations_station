@@ -61,9 +61,6 @@ class Pipfile:
     """Class to represent Pipfile config."""
 
     ignore = [
-        "open-aea-ledger-cosmos",
-        "open-aea-ledger-ethereum",
-        "open-aea-ledger-fetchai",
         "open-aea-flashbots",
         "open-aea-flashbots",
         "tomte",
@@ -306,6 +303,7 @@ def load_packages_dependencies(packages_dir: Path) -> List[Dependency]:
     """Returns a list of package dependencies."""
     package_manager = PackageManagerV1.from_dir(packages_dir=packages_dir)
     dependencies: Dict[str, Dependency] = {}
+    issues = []
     for package in package_manager.iter_dependency_tree():
         if package.package_type.value == "service":
             continue
@@ -319,17 +317,18 @@ def load_packages_dependencies(packages_dir: Path) -> List[Dependency]:
             if key not in dependencies:
                 dependencies[key] = value
             else:
-                print(f"Processing {key} {value} vs {dependencies[key]}")
                 if value.version == "":
                     continue
                 if dependencies[key].version == "":
                     dependencies[key] = value
                 if value == dependencies[key]:
                     continue
-                print(
-                    f"Non-matching dependency versions for {key}: {value} vs {dependencies[key]}"
-                )
+                issues.append(f"Actual: {key} {value} vs Expected: {dependencies[key]} in {str(package)}")
 
+    for issue in issues:
+        print(f"Dependency issue: {issue}")
+    if issues:
+        sys.exit(1)
     return list(dependencies.values())
 
 

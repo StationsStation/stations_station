@@ -32,7 +32,7 @@ restricted_to_protocols:
 - eightballer/http:0.1.0
 dependencies:
   aiohttp:
-    version: <=3.8.5
+    version: <4.0.0,>=3.8.5
   jsonschema:
     version: '>=4.3.3'
   openapi-core:

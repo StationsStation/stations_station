@@ -36,7 +36,9 @@ DEFAULT_LAUNCH_TIMEOUT = 10
 LAUNCH_SUCCEED_MESSAGE = "Start processing"
 
 
-class TestAgentLaunch(AEATestCaseMany,): 
+class TestAgentLaunch(
+    AEATestCaseMany,
+):
     """Test that the Agent launches."""
 
     IS_LOCAL = True

@@ -25,7 +25,7 @@ open-aea-ledger-ethereum = "==1.55.0"
 open-aea-cli-ipfs = "==1.55.0"
 open-aea-test-autonomy = "==0.15.2"
 open-autonomy = "==0.15.2"
-autonomy-dev = {version = "<=0.2.71,>=0.2.64", extras = ["all"]}
+autonomy-dev = {version = "0.2.72", extras = ["all"]}
 openapi-core = "==0.14.5"
 aiohttp = "<4.0.0,>=3.8.5"
 aioprometheus = "<21.0.0,>=20.0.0"

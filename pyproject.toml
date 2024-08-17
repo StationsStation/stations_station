@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stations_station"
-version = "0.1.9"
+version = "0.1.10"
 description = ""
 authors = ["eightballer"]
 readme = "README.md"

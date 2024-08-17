@@ -49,6 +49,14 @@ jobs:
           virtualenvs-path: ~/my-custom-path
           installer-parallel: true
 
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          validation_depth: 10
+          version: ${{ steps.tag_name.outputs.current_version }}
+          path: ./CHANGELOG.md
+
       - name: Install Project
         run: |
             make install
@@ -64,7 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           body: ${{ steps.changelog_reader.outputs.changes }}
-          files: dist/*.whl
+          files: packages/packages.json
           draft: false
           prerelease: false
 

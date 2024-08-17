@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.1.10](https://github.com/StationsStation/stations_station/tree/v0.1.10) (2024-08-17)
+
 ## [v0.1.8](https://github.com/StationsStation/stations_station/tree/v0.1.8) (2024-08-17)
 
 ## [v0.1.7](https://github.com/StationsStation/stations_station/tree/v0.1.7) (2024-08-17)

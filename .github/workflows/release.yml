@@ -67,9 +67,9 @@ jobs:
         with:
           commit_message: Update Changelog for PR
           file_pattern: CHANGELOG.md
-          branch: ${{ github.ref }}
+          branch: main
           push_options: '--force'
-          tagging_message: 'Update Changelog for PR'
+          tagging_message: 'v${{ steps.tag_name.outputs.current_version }}'
 
       - name: Get Changelog Entry
         id: changelog_reader

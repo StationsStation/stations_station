@@ -29,6 +29,8 @@ autonomy-dev = {version = "0.2.73", extras = ["all"]}
 openapi-core = "==0.14.5"
 aiohttp = "<4.0.0,>=3.8.5"
 aioprometheus = "<21.0.0,>=20.0.0"
+redis = {version = "<6", extras = ["all"]}
+python-socketio = "5.9.0"
 
 
 [tool.poetry.dev-dependencies]

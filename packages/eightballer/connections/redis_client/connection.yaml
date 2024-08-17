@@ -1,0 +1,30 @@
+name: redis_client
+author: eightballer
+version: 0.1.0
+type: connection
+description: A connection for Publish/Subscribe messaging systems, enabling message
+  distribution through channel-based subscription and publishing.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeihbuzfya7r4n572g4njetlw7zkn7fsjcwehvmzkx2wfphd4zsxzve
+  __init__.py: bafybeigmaigbnktfaf2b5phoppbgl77gelxibbgoj5jkjcn6kl66p6uviq
+  connection.py: bafybeifsyn5xkipkghnutxr2p7xvxesmtwrln5xo3tcc4cpsvvav4zddo4
+  tests/__init__.py: bafybeihaleivrqb4vkms472rl3zctmbo5asqbz72jlplqbt2wzl6ikt43a
+  tests/test_connection.py: bafybeidsrhrbkz7se4dpylb53rpnrmf65uddaz5ia6ddflsc5rega5nqvy
+fingerprint_ignore_patterns: []
+connections: []
+protocols:
+- eightballer/pubsub:0.1.0:bafybeie25l7gn3jcnljoyxwwx65v4ywwgnrxfl7nhvwi4dn7skokavcjdq
+class_name: RedisConnection
+config:
+  host: localhost
+  port: 6379
+  target_skill_id: eightballer/redis_subscriber:0.1.0
+excluded_protocols: []
+restricted_to_protocols: []
+dependencies:
+  redis:
+    version: <6,>=5
+is_abstract: false
+cert_requests: []

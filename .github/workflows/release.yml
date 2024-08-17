@@ -49,6 +49,22 @@ jobs:
           virtualenvs-path: ~/my-custom-path
           installer-parallel: true
 
+      - name: Update Changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        with:
+            token: ${{ secrets.GH_TOKEN }}
+            issues: true
+            issuesWoLabels: true
+            pullRequests: true
+            prWoLabels: true
+            unreleased: true
+            addSections: '{"documentation":{"prefix":"**Documentation:**","labels":["documentation"]}}'
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update Changelog for PR
+          file_pattern: CHANGELOG.md
+
       - name: Get Changelog Entry
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2

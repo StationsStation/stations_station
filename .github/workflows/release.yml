@@ -51,6 +51,7 @@ jobs:
 
       - name: Update Changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        id: changelog
         with:
             token: ${{ secrets.GH_TOKEN }}
             issues: true
@@ -67,14 +68,6 @@ jobs:
           branch: main
           push_options: '--force'
 
-      - name: Get Changelog Entry
-        id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          validation_depth: 10
-          version: ${{ steps.tag_name.outputs.current_version }}
-          path: ./CHANGELOG.md
-
       - name: Install Project
         run: |
             make install
@@ -89,7 +82,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          body: ${{ steps.changelog_reader.outputs.changes }}
+          body: ${{ steps.changelog.outputs.changelog }}
           files: packages/packages.json
           draft: false
           prerelease: false

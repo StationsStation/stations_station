@@ -31,6 +31,7 @@ aiohttp = "<4.0.0,>=3.8.5"
 aioprometheus = "<21.0.0,>=20.0.0"
 redis = {version = "<6", extras = ["all"]}
 python-socketio = "5.9.0"
+open-aea = "==1.55.0"
 
 
 [tool.poetry.dev-dependencies]

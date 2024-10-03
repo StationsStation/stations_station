@@ -22,7 +22,7 @@
 If you're looking to contribute or develop with `stations_station`, get the source code and set up the environment:
 
 ```shell
-git clone https://github.com/eightballer/stations_station
+git clone git@github.com:StationsStation/stations_station.git
 cd stations_station
 make install
 ```

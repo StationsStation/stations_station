@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -24,7 +23,7 @@ import email
 import urllib
 import asyncio
 import logging
-from typing import Dict, Optional, cast
+from typing import cast
 from unittest.mock import MagicMock
 
 import pytest
@@ -86,7 +85,7 @@ class TestClientServer:
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -123,7 +122,7 @@ class TestClientServer:
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -145,7 +144,7 @@ class TestClientServer:
         self,
         path: str,
         method: str = "get",
-        headers: Optional[Dict] = None,
+        headers: dict | None = None,
         body: bytes = b"",
     ) -> Envelope:
         """Make request envelope."""
@@ -158,12 +157,11 @@ class TestClientServer:
             version="",
             body=body,
         )
-        request_envelope = Envelope(
+        return Envelope(
             to=request_http_message.to,
             sender=request_http_message.sender,
             message=request_http_message,
         )
-        return request_envelope
 
     def _make_response(self, request_envelope: Envelope, status_code: int = 200, status_text: str = "") -> Envelope:
         """Make response envelope."""
@@ -179,13 +177,12 @@ class TestClientServer:
             status_text=status_text,
             body=incoming_message.body,
         )
-        response_envelope = Envelope(
+        return Envelope(
             to=message.to,
             sender=message.sender,
             context=request_envelope.context,
             message=message,
         )
-        return response_envelope
 
     @pytest.mark.asyncio
     async def test_post_with_payload(self):
@@ -204,7 +201,7 @@ class TestClientServer:
     async def test_get_with_query(self):
         """Test client and server with url query."""
         query = {"key": "value"}
-        path = "/test?{}".format(urllib.parse.urlencode(query))
+        path = f"/test?{urllib.parse.urlencode(query)}"
         initial_request = self._make_request(path, "GET")
         await self.client.send(initial_request)
         request = await asyncio.wait_for(self.server.receive(), timeout=5)

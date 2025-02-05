@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -17,15 +16,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the classes required for websockets dialogue management.
+"""This module contains the classes required for websockets dialogue management.
 
 - WebsocketsDialogue: The dialogue class maintains state of a dialogue and manages it.
 - WebsocketsDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import cast
+from collections.abc import Callable
 
 from aea.common import Address
 from aea.protocols.base import Message
@@ -37,11 +36,11 @@ from packages.eightballer.protocols.websockets.message import WebsocketsMessage
 class WebsocketsDialogue(Dialogue):
     """The websockets dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    INITIAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {WebsocketsMessage.Performative.CONNECT, WebsocketsMessage.Performative.SEND}
     )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({WebsocketsMessage.Performative.DISCONNECT_ACK})
-    VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
+    TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset({WebsocketsMessage.Performative.DISCONNECT_ACK})
+    VALID_REPLIES: dict[Message.Performative, frozenset[Message.Performative]] = {
         WebsocketsMessage.Performative.CONNECT: frozenset(
             {
                 WebsocketsMessage.Performative.CONNECTION_ACK,
@@ -99,10 +98,9 @@ class WebsocketsDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[WebsocketsMessage] = WebsocketsMessage,
+        message_class: type[WebsocketsMessage] = WebsocketsMessage,
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -134,10 +132,9 @@ class WebsocketsDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
-        dialogue_class: Type[WebsocketsDialogue] = WebsocketsDialogue,
+        dialogue_class: type[WebsocketsDialogue] = WebsocketsDialogue,
     ) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: the address of the entity for whom dialogues are maintained
         :param dialogue_class: the dialogue class used
@@ -146,7 +143,7 @@ class WebsocketsDialogues(Dialogues, ABC):
         Dialogues.__init__(
             self,
             self_address=self_address,
-            end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
+            end_states=cast(frozenset[Dialogue.EndState], self.END_STATES),
             message_class=WebsocketsMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 fetchai
@@ -17,15 +16,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the classes required for default dialogue management.
+"""This module contains the classes required for default dialogue management.
 
 - DefaultDialogue: The dialogue class maintains state of a dialogue and manages it.
 - DefaultDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import cast
+from collections.abc import Callable
 
 from aea.common import Address
 from aea.protocols.base import Message
@@ -37,13 +36,13 @@ from packages.eightballer.protocols.default.message import DefaultMessage
 class DefaultDialogue(Dialogue):
     """The default dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    INITIAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {DefaultMessage.Performative.BYTES, DefaultMessage.Performative.ERROR}
     )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {DefaultMessage.Performative.END, DefaultMessage.Performative.ERROR}
     )
-    VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
+    VALID_REPLIES: dict[Message.Performative, frozenset[Message.Performative]] = {
         DefaultMessage.Performative.BYTES: frozenset(
             {
                 DefaultMessage.Performative.BYTES,
@@ -71,10 +70,9 @@ class DefaultDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[DefaultMessage] = DefaultMessage,
+        message_class: type[DefaultMessage] = DefaultMessage,
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -101,10 +99,9 @@ class DefaultDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
-        dialogue_class: Type[DefaultDialogue] = DefaultDialogue,
+        dialogue_class: type[DefaultDialogue] = DefaultDialogue,
     ) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: the address of the entity for whom dialogues are maintained
         :param dialogue_class: the dialogue class used
@@ -113,7 +110,7 @@ class DefaultDialogues(Dialogues, ABC):
         Dialogues.__init__(
             self,
             self_address=self_address,
-            end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
+            end_states=cast(frozenset[Dialogue.EndState], self.END_STATES),
             message_class=DefaultMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,

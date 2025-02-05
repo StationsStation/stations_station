@@ -8,14 +8,14 @@ description: A protocol for WebSocket client applications, facilitating two-way 
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifv76dkqrqudve6qzfpm3px77t7dwg2fbk4auxy2xpcgqqbiqoyja
-  custom_types.py: bafybeiapemedpyn2j475bwgkmg73u4eczumjuiovk3oqkn25livp3qv4sy
-  dialogues.py: bafybeiapiu2ifial4yc5kqiq57fdlh2mzzuzkaznmg247ns33sowhuw3qi
+  __init__.py: bafybeibzvpnr4hh73tzh2elngzu4l2d5tvpd5sjh5ahofumzj5opah7rte
+  custom_types.py: bafybeic6mxeufkb3a77logkrog4ns2hd6mbcdeabdojd4j4onj5lhjx2vi
+  dialogues.py: bafybeibbmi5suwuubxmt66utolsaq2alvh6slmfiyfcimnjogebdn35br4
   message.py: bafybeibo2htqvidmjul5f2vj6qzozd5q63ajo6cziq776bj5pdm7vpx6w4
   serialization.py: bafybeicmhsokifdbxniiito6ef4p35vrrlcnlalwozqgrpyvowetygmlny
-  tests/__init__.py: bafybeig6pzvifwf5i4f7dpaumn7g3jjwodxkw2z7ysijrqlkpvaa4mdjeq
-  tests/test_websockets_dialogues.py: bafybeibiauldgqofjl6r2c7bvuou4a2rbqye3hyn7y52bo6zpszdfaiwzm
-  tests/test_websockets_messages.py: bafybeiaa3exgbpxr3g22lrlqtakcfkmfd33j3cx7vsasz2hacjemxko73y
+  tests/__init__.py: bafybeiennamvl5ikchxfzktscvxbmdxfk5jv6q5cunie6zxelovg6hvhay
+  tests/test_websockets_dialogues.py: bafybeih4jhzrkatsprycgl2lazvcubpywd2folilr57vq3ye33dqtrcqgi
+  tests/test_websockets_messages.py: bafybeifkir3ndjndxwwirvqgu37bzuquuy66aqjoaiacvnv6qvg7jqfd34
   websockets.proto: bafybeieuybxmqbmsiyixz2fgkmjqqrvzgnkkdeurkflogfkerimdnoheyi
   websockets_pb2.py: bafybeic3mkgc5q3pe2s7kkfnrkne4tugowh7p5rb6oopn4ln6ooixoljfq
 fingerprint_ignore_patterns: []

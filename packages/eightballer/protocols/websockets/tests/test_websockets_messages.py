@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -20,7 +19,6 @@
 """Test messages module for websockets protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
@@ -33,7 +31,7 @@ class TestMessageWebsockets(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = WebsocketsMessage
 
-    def build_messages(self) -> List[WebsocketsMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[WebsocketsMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             WebsocketsMessage(
@@ -67,7 +65,7 @@ class TestMessageWebsockets(BaseProtocolMessagesTestCase):
             ),
         ]
 
-    def build_inconsistent(self) -> List[WebsocketsMessage]:  # type: ignore[override]
+    def build_inconsistent(self) -> list[WebsocketsMessage]:  # type: ignore[override]
         """Build inconsistent messages to be used for testing."""
         return [
             WebsocketsMessage(

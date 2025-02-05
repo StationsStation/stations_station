@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -17,15 +16,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the classes required for prometheus dialogue management.
+"""This module contains the classes required for prometheus dialogue management.
 
 - PrometheusDialogue: The dialogue class maintains state of a dialogue and manages it.
 - PrometheusDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import cast
+from collections.abc import Callable
 
 from aea.common import Address
 from aea.protocols.base import Message
@@ -37,14 +36,14 @@ from packages.eightballer.protocols.prometheus.message import PrometheusMessage
 class PrometheusDialogue(Dialogue):
     """The prometheus dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    INITIAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {
             PrometheusMessage.Performative.ADD_METRIC,
             PrometheusMessage.Performative.UPDATE_METRIC,
         }
     )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({PrometheusMessage.Performative.RESPONSE})
-    VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
+    TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset({PrometheusMessage.Performative.RESPONSE})
+    VALID_REPLIES: dict[Message.Performative, frozenset[Message.Performative]] = {
         PrometheusMessage.Performative.ADD_METRIC: frozenset({PrometheusMessage.Performative.RESPONSE}),
         PrometheusMessage.Performative.RESPONSE: frozenset(),
         PrometheusMessage.Performative.UPDATE_METRIC: frozenset({PrometheusMessage.Performative.RESPONSE}),
@@ -66,10 +65,9 @@ class PrometheusDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[PrometheusMessage] = PrometheusMessage,
+        message_class: type[PrometheusMessage] = PrometheusMessage,
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -96,10 +94,9 @@ class PrometheusDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
-        dialogue_class: Type[PrometheusDialogue] = PrometheusDialogue,
+        dialogue_class: type[PrometheusDialogue] = PrometheusDialogue,
     ) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: the address of the entity for whom dialogues are maintained
         :param dialogue_class: the dialogue class used
@@ -108,7 +105,7 @@ class PrometheusDialogues(Dialogues, ABC):
         Dialogues.__init__(
             self,
             self_address=self_address,
-            end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
+            end_states=cast(frozenset[Dialogue.EndState], self.END_STATES),
             message_class=PrometheusMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,

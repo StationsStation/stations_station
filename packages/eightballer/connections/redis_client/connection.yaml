@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihbuzfya7r4n572g4njetlw7zkn7fsjcwehvmzkx2wfphd4zsxzve
-  __init__.py: bafybeigmaigbnktfaf2b5phoppbgl77gelxibbgoj5jkjcn6kl66p6uviq
-  connection.py: bafybeifsyn5xkipkghnutxr2p7xvxesmtwrln5xo3tcc4cpsvvav4zddo4
-  tests/__init__.py: bafybeihaleivrqb4vkms472rl3zctmbo5asqbz72jlplqbt2wzl6ikt43a
-  tests/test_connection.py: bafybeidsrhrbkz7se4dpylb53rpnrmf65uddaz5ia6ddflsc5rega5nqvy
+  __init__.py: bafybeicdpcirur5aiet3ic7ebwyo5hhfqcm3oryzmwvm3yuh4ui46u7ssu
+  connection.py: bafybeicvaom3hn7sp7b5nfzhizm26lpsre7ita6rg7lidepleunxwpklnq
+  tests/__init__.py: bafybeidcpnukojv5mtjrevm6xqq7zqstch7c56tjsyx55hn5vx3a7ztq5y
+  tests/test_connection.py: bafybeidmc67pwasu6c5cbztnwyjckuqi45pbdsrmtqdykwh35z7ldn3rdq
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- eightballer/pubsub:0.1.0:bafybeie25l7gn3jcnljoyxwwx65v4ywwgnrxfl7nhvwi4dn7skokavcjdq
+- eightballer/pubsub:0.1.0:bafybeiakcgcainnriztgv47nn3o3vaakh6wmgpf6ztx6b4ubngmaaut5pe
 class_name: RedisConnection
 config:
   host: localhost

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2018-2019 Fetch.AI Limited
@@ -21,7 +20,7 @@
 
 import asyncio
 import logging
-from typing import Any, Tuple, Union, Optional, cast
+from typing import Any, Optional, cast
 
 import aioprometheus  # type: ignore
 from aea.common import Address
@@ -50,8 +49,7 @@ class PrometheusDialogues(BasePrometheusDialogues):
     """The dialogues class keeps track of all prometheus dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """
@@ -59,7 +57,7 @@ class PrometheusDialogues(BasePrometheusDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -84,10 +82,9 @@ class PrometheusChannel:
         address: Address,
         host: str,
         port: int,
-        logger: Union[logging.Logger, logging.LoggerAdapter],
+        logger: logging.Logger | logging.LoggerAdapter,
     ):
-        """
-        Initialize a prometheus channel.
+        """Initialize a prometheus channel.
 
         :param address: The address of the connection.
         :param host: The host at which to expose the metrics.
@@ -97,56 +94,55 @@ class PrometheusChannel:
         self.address = address
         self.metrics = {}  # type: Dict[str, aioprometheus.Collector]
         self.logger = logger
-        self._loop: Optional[asyncio.AbstractEventLoop] = None
-        self._queue: Optional[asyncio.Queue] = None
+        self._loop: asyncio.AbstractEventLoop | None = None
+        self._queue: asyncio.Queue | None = None
         self._dialogues = PrometheusDialogues()
         self._host = host
         self._port = port
         self._service = aioprometheus.Service()
 
-    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[PrometheusMessage, Optional[PrometheusDialogue]]:
-        """
-        Get a message copy and dialogue related to this message.
+    def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[PrometheusMessage, PrometheusDialogue | None]:
+        """Get a message copy and dialogue related to this message.
 
         :param envelope: incoming envelope
 
         :return: Tuple[Message, Optional[Dialogue]]
         """
         message = cast(PrometheusMessage, envelope.message)
-        dialogue = cast(Optional[PrometheusDialogue], self._dialogues.update(message))
+        dialogue = cast(PrometheusDialogue | None, self._dialogues.update(message))
         return message, dialogue
 
     @property
     def queue(self) -> asyncio.Queue:
         """Check queue is set and return queue."""
         if self._queue is None:  # pragma: nocover
-            raise ValueError("Channel is not connected")
+            msg = "Channel is not connected"
+            raise ValueError(msg)
         return self._queue
 
     async def connect(self) -> None:
         """Start prometheus http server."""
         if self._queue:  # pragma: nocover
-            return None
+            return
         self._loop = asyncio.get_event_loop()
         self._queue = asyncio.Queue()
         await self._service.start(addr=self._host, port=self._port)
         self.logger.info(f"Prometheus server started at {self._host}:{self._port}")
 
     async def send(self, envelope: Envelope) -> None:
-        """
-        Process the envelopes to prometheus.
+        """Process the envelopes to prometheus.
 
         :param envelope: envelope
         """
         sender = envelope.sender
-        self.logger.debug("Processing message from {}: {}".format(sender, envelope))
+        self.logger.debug(f"Processing message from {sender}: {envelope}")
         if envelope.protocol_specification_id != PrometheusMessage.protocol_specification_id:
-            raise ValueError(f"Protocol {envelope.protocol_specification_id} is not valid for prometheus.")
+            msg = f"Protocol {envelope.protocol_specification_id} is not valid for prometheus."
+            raise ValueError(msg)
         await self._handle_prometheus_message(envelope)
 
     async def _handle_prometheus_message(self, envelope: Envelope) -> None:
-        """
-        Handle messages to prometheus.
+        """Handle messages to prometheus.
 
         :param envelope: the envelope
         """
@@ -157,7 +153,7 @@ class PrometheusChannel:
         message, dialogue = self._get_message_and_dialogue(envelope)
 
         if dialogue is None:
-            self.logger.warning("Could not create dialogue from message={}".format(message))
+            self.logger.warning(f"Could not create dialogue from message={message}")
             return
 
         if message.performative == PrometheusMessage.Performative.ADD_METRIC:
@@ -168,7 +164,7 @@ class PrometheusChannel:
             self.logger.warning("Unrecognized performative for PrometheusMessage")
             return
 
-        response_code, response_msg = cast(Tuple[int, str], response)
+        response_code, response_msg = cast(tuple[int, str], response)
 
         msg = dialogue.reply(
             performative=PrometheusMessage.Performative.RESPONSE,
@@ -179,7 +175,7 @@ class PrometheusChannel:
         envelope = Envelope(to=msg.to, sender=msg.sender, message=msg)
         await self._send(envelope)
 
-    async def _handle_add_metric(self, message: PrometheusMessage) -> Tuple[int, str]:
+    async def _handle_add_metric(self, message: PrometheusMessage) -> tuple[int, str]:
         """Handle add metric message.
 
         :param message: the message to handle.
@@ -201,7 +197,7 @@ class PrometheusChannel:
 
         return response_code, response_msg
 
-    async def _handle_update_metric(self, message: PrometheusMessage) -> Tuple[int, str]:
+    async def _handle_update_metric(self, message: PrometheusMessage) -> tuple[int, str]:
         """Handle update metric message.
 
         :param message: the message to handle.
@@ -216,20 +212,19 @@ class PrometheusChannel:
             if update_func is None:
                 response_code = 400
                 response_msg = f"Update function {message.callable} not found for metric {metric}."
-            else:
-                if message.callable in VALID_UPDATE_FUNCS:
-                    # Update the metric ("inc" and "dec" do not take "value" argument)
-                    if message.callable in {"inc", "dec"}:
-                        update_func(message.labels)
-                    else:
-                        update_func(message.labels, message.value)
-                    response_code = 200
-                    response_msg = f"Metric {metric} successfully updated."
+            elif message.callable in VALID_UPDATE_FUNCS:
+                # Update the metric ("inc" and "dec" do not take "value" argument)
+                if message.callable in {"inc", "dec"}:
+                    update_func(message.labels)
                 else:
-                    response_code = 400
-                    response_msg = (
-                        f"Failed to update metric {metric}: {message.callable} is not a valid update function."
-                    )
+                    update_func(message.labels, message.value)
+                response_code = 200
+                response_msg = f"Metric {metric} successfully updated."
+            else:
+                response_code = 400
+                response_msg = (
+                    f"Failed to update metric {metric}: {message.callable} is not a valid update function."
+                )
 
         return response_code, response_msg
 
@@ -247,7 +242,7 @@ class PrometheusChannel:
             self._queue = None
         await self._service.stop()
 
-    async def get(self) -> Optional[Envelope]:
+    async def get(self) -> Envelope | None:
         """Get incoming envelope."""
         return await self.queue.get()
 
@@ -258,8 +253,7 @@ class PrometheusConnection(Connection):
     connection_id = PUBLIC_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize a connection to a local prometheus server.
+        """Initialize a connection to a local prometheus server.
 
         :param kwargs: the keyword arguments of the parent class.
         """
@@ -290,8 +284,7 @@ class PrometheusConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: Envelope) -> None:
-        """
-        Send an envelope.
+        """Send an envelope.
 
         :param envelope: the envelop
         """
@@ -299,8 +292,7 @@ class PrometheusConnection(Connection):
         await self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional["Envelope"]:
-        """
-        Receive an envelope.
+        """Receive an envelope.
 
         :param args: positional arguments
         :param kwargs: keyword arguments
@@ -309,7 +301,6 @@ class PrometheusConnection(Connection):
         del args, kwargs
         self._ensure_connected()
         try:
-            envelope = await self.channel.get()
-            return envelope
+            return await self.channel.get()
         except asyncio.CancelledError:  # pragma: no cover
             return None

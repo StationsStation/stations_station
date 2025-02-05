@@ -7,18 +7,18 @@ description: The scaffold connection provides a scaffold for a connection to be 
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibebl36eaaewytw3b75m6k6drk5bldooxf4lhcbcfi4nmyuiwrcny
-  connection.py: bafybeicbxfguilr6y3ecuxgshej6ar2rwp4ytjdkghmgvpmtnewxexk6za
+  __init__.py: bafybeigdmqjqsy7q4ea3d2hf6sadcjepnur347rxbnogjau3ppteoqk53y
+  connection.py: bafybeifmddfcklxnccmzkwrcgyatbvya5ssh3uiuo2vaneriehq7wifbom
   readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
-  tests/__init__.py: bafybeiewlnh2eycgprywqi54fy766qorufe4qpjip4son4zvebwtut3p2m
+  tests/__init__.py: bafybeidneidgntc3i2dgyjes5ljzu4ve7fhl5pixdrps2ipwpccxihxtny
   tests/data/petstore_sim.yaml: bafybeiaekkfxljlv57uviz4ug6isdqbzsnuxpsgy3dvhzh22daql3xh2i4
-  tests/test_ws_server.py: bafybeibc5pko3ldlewwxd44pvvzsq3k4ijhquo3q7td7cw6icq2c7uybvm
+  tests/test_ws_server.py: bafybeih6zxgiewayomnr64lbxqtwakwrw3zy4nznmoyi7rqs4uhfwlrazu
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_server:0.1.0:bafybeid7u7cx2smnb3iz6zs6gt3k4ijwevm6yqqfo4pmziqoubl2p52ele
+- eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
 protocols:
-- eightballer/http:0.1.0:bafybeieoom2ajzvurwsjbivx23dwilarfzkihgqpgqp43ypowpr5xdyjr4
-- eightballer/websockets:0.1.0:bafybeihoiyzxc3ikhgty54snlu7djyn34dcqcuqppnf5zajuabc4ecgxwm
+- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
+- eightballer/websockets:0.1.0:bafybeifv5w5urddjpiqlsynl3ljdtffhycrebeycnrljtus4hkm2gzygb4
 class_name: WebSocketServerConnection
 config:
   host: 0.0.0.0

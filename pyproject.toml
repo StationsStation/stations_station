@@ -15,23 +15,24 @@ classifiers = [
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
 ]
+package-mode =false
 
 [tool.poetry.dependencies]
-python = "<3.12,>=3.9"
+python = "<3.12,>=3.10"
 cython = "<3.0.0"
-open-aea-ledger-solana = "==1.55.0"
-open-aea-ledger-cosmos = "==1.55.0"
-open-aea-ledger-ethereum = "==1.55.0"
-open-aea-cli-ipfs = "==1.55.0"
-open-aea-test-autonomy = "==0.15.2"
-open-autonomy = "==0.15.2"
-autonomy-dev = {version = "==0.2.73", extras = ["all"]}
+open-aea-ledger-solana = "==1.63.0"
+open-aea-ledger-cosmos = "==1.63.0"
+open-aea-ledger-ethereum = "==1.63.0"
+open-aea-cli-ipfs = "==1.63.0"
+open-aea-test-autonomy = "==0.19.1"
+open-autonomy = "==0.19.1"
+autonomy-dev = {version = "==0.2.109", extras = ["all"]}
 openapi-core = "==0.14.5"
 aiohttp = "<4.0.0,>=3.8.5"
 aioprometheus = "<21.0.0,>=20.0.0"
 redis = "<6,>=5"
 python-socketio = ">=5.9.0"
-open-aea = "==1.55.0"
+open-aea = "==1.63.0"
 
 
 [tool.poetry.dev-dependencies]

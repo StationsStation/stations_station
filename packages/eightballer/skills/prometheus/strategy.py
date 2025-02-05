@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -38,8 +37,7 @@ class DataRequestModel(Model):
     """This class models the AdvancedDataRequest skill."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -20,7 +19,6 @@
 """Test messages module for prometheus protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
@@ -32,7 +30,7 @@ class TestMessagePrometheus(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = PrometheusMessage
 
-    def build_messages(self) -> List[PrometheusMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[PrometheusMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             PrometheusMessage(
@@ -56,7 +54,7 @@ class TestMessagePrometheus(BaseProtocolMessagesTestCase):
             ),
         ]
 
-    def build_inconsistent(self) -> List[PrometheusMessage]:  # type: ignore[override]
+    def build_inconsistent(self) -> list[PrometheusMessage]:  # type: ignore[override]
         """Build inconsistent messages to be used for testing."""
         return [
             PrometheusMessage(

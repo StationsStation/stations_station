@@ -1,5 +1,4 @@
 # noqa: INP001
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -21,22 +20,16 @@
 """Tests for the HTTP Client and Server connections together."""
 
 # pylint: disable=W0201
-import email
-import urllib
 import asyncio
 import logging
-from typing import Dict, Optional, cast
 from unittest.mock import MagicMock
 
-import pytest
 from aea.common import Address
-from aea.mail.base import Message, Envelope
+from aea.mail.base import Message
 from aea.identity.base import Identity
-from aea.test_tools.network import get_host, get_unused_tcp_port
 from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
-from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import HttpDialogue, HttpDialogues
 from packages.eightballer.connections.http_client.connection import HTTPClientConnection
 
@@ -75,7 +68,7 @@ class TestClientServer:
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent

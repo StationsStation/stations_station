@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2018-2023 Fetch.AI Limited
@@ -44,17 +43,16 @@ class HttpDialogues(Model, BaseHttpDialogues):
     """This class keeps track of all http dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """
         Model.__init__(self, **kwargs)
 
-        def role_from_first_message(  # noqa
+        def role_from_first_message(
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -78,8 +76,7 @@ class PrometheusDialogues(Model, BasePrometheusDialogues):
     """The dialogues class keeps track of all prometheus dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """
@@ -91,7 +88,7 @@ class PrometheusDialogues(Model, BasePrometheusDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent

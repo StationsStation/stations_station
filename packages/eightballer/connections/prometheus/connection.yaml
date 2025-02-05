@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihu3wxkioxutegrw3b27m7dv2d7pwqgak7cfpamygpr2jfygl6dsy
-  __init__.py: bafybeidzhc6nzo66npv2dgnkagwt7qihbjpuzwwni6epov3igybwwn5wou
-  connection.py: bafybeibqczdn5limhmcyxikupyk4z7lki3avbrwbuyr7jq5i3uobe6isha
-  tests/test_prometheus.py: bafybeihcwsko3kuldjn4fvsl2aqnbtu3wichq4jraypmszhyjxgtznsdkq
+  __init__.py: bafybeigncgme2tvhrq2ohnbdajjexindsniloh5aufq45wm2ptznbyrpea
+  connection.py: bafybeihio3gj7urcpm3kdaiiey5w4npdpfyjirefrodikh3ljpexzliqnu
+  tests/test_prometheus.py: bafybeigaw5yh4fgrwmwtrzkbzg2btrpiaoxrunsdxoxbioojqg6vgj4bm4
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- eightballer/prometheus:1.0.0:bafybeicjwq2wgka7g5dnn5dnuzstfzt5fbbgknvd5lwk7uzwtz3h6yg5du
+- eightballer/prometheus:1.0.0:bafybeibvuazvki5pbeakpvcjm7icgf4wosacpcfnpyr4tk5dz3egoqny4a
 class_name: PrometheusConnection
 config:
   host: 0.0.0.0

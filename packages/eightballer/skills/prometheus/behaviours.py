@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -19,7 +18,7 @@
 
 """This package contains a scaffold of a behaviour."""
 
-from typing import Dict, cast
+from typing import cast
 
 import psutil
 from aea.skills.behaviours import TickerBehaviour
@@ -64,10 +63,9 @@ class PrometheusBehaviour(TickerBehaviour):
         metric_name: str,
         metric_type: str,
         description: str,
-        labels: Dict[str, str],
+        labels: dict[str, str],
     ) -> None:
-        """
-        Add a prometheus metric.
+        """Add a prometheus metric.
 
         :param metric_name: the name of the metric to add.
         :param metric_type: the type of the metric.
@@ -93,10 +91,9 @@ class PrometheusBehaviour(TickerBehaviour):
         metric_name: str,
         update_func: str,
         value: float,
-        labels: Dict[str, str],
+        labels: dict[str, str],
     ) -> None:
-        """
-        Update a prometheus metric.
+        """Update a prometheus metric.
 
         :param metric_name: the name of the metric.
         :param update_func: the name of the update function (e.g. inc, dec, set, ...).

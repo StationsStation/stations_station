@@ -1,5 +1,4 @@
 # noqa: INP001
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2021-2023 Valory AG
@@ -26,7 +25,6 @@ import subprocess
 from pathlib import Path
 
 from aea.test_tools.test_cases import AEATestCaseMany
-from aea_test_autonomy.configurations import ANY_ADDRESS, DEFAULT_REQUESTS_TIMEOUT
 
 
 AGENT_NAME = "base"
@@ -59,8 +57,7 @@ class TestAgentLaunch(
 
     @classmethod
     def is_running(cls, process: subprocess.Popen, timeout: int = DEFAULT_LAUNCH_TIMEOUT) -> bool:
-        """
-        Check if the AEA is launched and running (ready to process messages).
+        """Check if the AEA is launched and running (ready to process messages).
 
         :param process: agent subprocess.
         :param timeout: the timeout to wait for launch to complete

@@ -1,11 +1,7 @@
 # noqa: INP001
 """Test the prometheus skill."""
 
-import json
-import logging
-from typing import cast
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 from aea.test_tools.test_skill import BaseSkillTestCase

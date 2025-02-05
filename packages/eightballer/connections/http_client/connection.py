@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -23,7 +22,7 @@ import ssl
 import email
 import asyncio
 import logging
-from typing import Any, Set, Tuple, Optional, cast
+from typing import Any, Optional, cast
 from asyncio import CancelledError
 from traceback import format_exc
 from asyncio.tasks import Task
@@ -61,8 +60,7 @@ ssl_context = ssl.create_default_context(cafile=certifi.where())
 
 
 def headers_to_string(headers: CIMultiDictProxy) -> str:
-    """
-    Convert headers to string.
+    """Convert headers to string.
 
     :param headers: dict
 
@@ -86,7 +84,7 @@ class HttpDialogues(BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -116,8 +114,7 @@ class HTTPClientAsyncChannel:
         port: int,
         connection_id: PublicId,
     ):
-        """
-        Initialize an http client channel.
+        """Initialize an http client channel.
 
         :param agent_address: the address of the agent.
         :param address: server hostname / IP address
@@ -133,14 +130,13 @@ class HTTPClientAsyncChannel:
         self._in_queue = None  # type: Optional[asyncio.Queue]  # pragma: no cover
         self._loop = None  # type: Optional[asyncio.AbstractEventLoop]  # pragma: no cover
         self.is_stopped = True
-        self._tasks: Set[Task] = set()
+        self._tasks: set[Task] = set()
 
         self.logger = _default_logger
         self.logger.debug("Initialised the HTTP client channel")
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """
-        Connect channel using loop.
+        """Connect channel using loop.
 
         :param loop: asyncio event loop to use
         """
@@ -148,31 +144,30 @@ class HTTPClientAsyncChannel:
         self._in_queue = asyncio.Queue()
         self.is_stopped = False
 
-    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[HttpMessage, Optional[HttpDialogue]]:
-        """
-        Get a message copy and dialogue related to this message.
+    def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[HttpMessage, HttpDialogue | None]:
+        """Get a message copy and dialogue related to this message.
 
         :param envelope: incoming envelope
 
         :return: Tuple[MEssage, Optional[Dialogue]]
         """
         message = cast(HttpMessage, envelope.message)
-        dialogue = cast(Optional[HttpDialogue], self._dialogues.update(message))
+        dialogue = cast(HttpDialogue | None, self._dialogues.update(message))
         return message, dialogue
 
     async def _http_request_task(self, request_envelope: Envelope) -> None:
-        """
-        Perform http request and send back response.
+        """Perform http request and send back response.
 
         :param request_envelope: request envelope.
         """
         if not self._loop:  # pragma: nocover
-            raise ValueError("Channel is not connected")
+            msg = "Channel is not connected"
+            raise ValueError(msg)
 
         request_http_message, dialogue = self._get_message_and_dialogue(request_envelope)
 
         if not dialogue:
-            self.logger.warning("Could not create dialogue for message={}".format(request_http_message))
+            self.logger.warning(f"Could not create dialogue for message={request_http_message}")
             return
 
         try:
@@ -188,7 +183,7 @@ class HTTPClientAsyncChannel:
                 body=resp._body if resp._body is not None else b"",  # noqa  # noqa
                 dialogue=dialogue,
             )
-        except Exception:  # noqa
+        except Exception:
             self.logger.exception(
                 f"Exception raised during http call: {request_http_message.method} {request_http_message.url}"
             )
@@ -205,8 +200,7 @@ class HTTPClientAsyncChannel:
             await self._in_queue.put(envelope)
 
     async def _perform_http_request(self, request_http_message: HttpMessage) -> ClientResponse:
-        """
-        Perform http request and return response.
+        """Perform http request and return response.
 
         :param request_http_message: HttpMessage with http request constructed.
 
@@ -214,7 +208,7 @@ class HTTPClientAsyncChannel:
         """
         try:
             if request_http_message.is_set("headers") and request_http_message.headers:
-                headers: Optional[dict] = dict(email.message_from_string(request_http_message.headers).items())
+                headers: dict | None = dict(email.message_from_string(request_http_message.headers).items())
             else:
                 headers = None
             async with aiohttp.ClientSession() as session:
@@ -234,8 +228,7 @@ class HTTPClientAsyncChannel:
             raise
 
     def send(self, request_envelope: Envelope) -> None:
-        """
-        Send an envelope with http request data to request.
+        """Send an envelope with http request data to request.
 
         Convert an http envelope into an http request.
         Send the http request
@@ -246,7 +239,8 @@ class HTTPClientAsyncChannel:
         :param request_envelope: the envelope containing an http request
         """
         if self._loop is None or self.is_stopped:
-            raise ValueError("Can not send a message! Channel is not started!")
+            msg = "Can not send a message! Channel is not started!"
+            raise ValueError(msg)
 
         if request_envelope is None:
             return
@@ -267,8 +261,7 @@ class HTTPClientAsyncChannel:
         self._tasks.add(task)
 
     def _task_done_callback(self, task: Task) -> None:
-        """
-        Handle http request task completed.
+        """Handle http request task completed.
 
         Removes tasks from _tasks.
 
@@ -278,13 +271,13 @@ class HTTPClientAsyncChannel:
         self.logger.debug(f"Task completed: {task}")
 
     async def get_message(self) -> Optional["Envelope"]:
-        """
-        Get http response from in-queue.
+        """Get http response from in-queue.
 
         :return: None or envelope with http response.
         """
         if self._in_queue is None:
-            raise ValueError("Looks like channel is not connected!")
+            msg = "Looks like channel is not connected!"
+            raise ValueError(msg)
 
         try:
             return await self._in_queue.get()
@@ -296,12 +289,11 @@ class HTTPClientAsyncChannel:
         http_request_message: HttpMessage,
         status_code: int,
         headers: CIMultiDictProxy,
-        status_text: Optional[Any],
+        status_text: Any | None,
         body: bytes,
         dialogue: HttpDialogue,
     ) -> Envelope:
-        """
-        Convert an HTTP response object (from the 'requests' library) into an
+        """Convert an HTTP response object (from the 'requests' library) into an
         Envelope containing an HttpMessage (from the 'http' Protocol).
 
         :param http_request_message: the message of the http request envelop
@@ -322,12 +314,11 @@ class HTTPClientAsyncChannel:
             body=body,
             version="",
         )
-        envelope = Envelope(
+        return Envelope(
             to=http_message.to,
             sender=http_message.sender,
             message=http_message,
         )
-        return envelope
 
     async def _cancel_tasks(self) -> None:
         """Cancel all requests tasks pending."""
@@ -347,7 +338,7 @@ class HTTPClientAsyncChannel:
     async def disconnect(self) -> None:
         """Disconnect."""
         if not self.is_stopped:
-            self.logger.info("HTTP Client has shutdown on port: {}.".format(self.port))
+            self.logger.info(f"HTTP Client has shutdown on port: {self.port}.")
             self.is_stopped = True
 
             await self._cancel_tasks()
@@ -359,8 +350,7 @@ class HTTPClientConnection(Connection):
     connection_id = PUBLIC_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize a HTTP client connection.
+        """Initialize a HTTP client connection.
 
         :param kwargs: keyword arguments
         """
@@ -368,7 +358,8 @@ class HTTPClientConnection(Connection):
         host = cast(str, self.configuration.config.get("host"))
         port = cast(int, self.configuration.config.get("port"))
         if host is None or port is None:  # pragma: nocover
-            raise ValueError("host and port must be set!")
+            msg = "host and port must be set!"
+            raise ValueError(msg)
         self.channel = HTTPClientAsyncChannel(
             self.address,
             host,
@@ -394,8 +385,7 @@ class HTTPClientConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: "Envelope") -> None:
-        """
-        Send an envelope.
+        """Send an envelope.
 
         :param envelope: the envelop
         """
@@ -403,8 +393,7 @@ class HTTPClientConnection(Connection):
         self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional["Envelope"]:
-        """
-        Receive an envelope.
+        """Receive an envelope.
 
         :param args: positional arguments
         :param kwargs: keyword arguments

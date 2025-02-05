@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -20,7 +19,8 @@
 
 import ssl
 import asyncio
-from typing import Any, Dict, Optional, cast
+import contextlib
+from typing import Any, cast
 from asyncio import CancelledError
 from textwrap import dedent
 from asyncio.events import AbstractEventLoop
@@ -59,8 +59,7 @@ class WebSocketDialogue(BaseWebsocketsDialogues):
     """The dialogues class keeps track of all http dialogues."""
 
     def __init__(self, self_address: Address = None, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: address of the dialogues maintainer.
         :param kwargs: keyword arguments.
@@ -70,7 +69,7 @@ class WebSocketDialogue(BaseWebsocketsDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -97,13 +96,12 @@ class WebSocketChannel(HTTPChannel):
 
     def __init__(self, **kwarg):
         super().__init__(**kwarg)
-        self.open_connections: Dict[RequestId, Future] = {}
+        self.open_connections: dict[RequestId, Future] = {}
         self._websocket_dialogues = WebSocketDialogue(self.address)
         self.wss_server = None
 
     async def _base_connect(self, loop: AbstractEventLoop) -> None:
-        """
-        Connect.
+        """Connect.
 
         Upon HTTP Channel connection, start the HTTP Server in its own thread.
 
@@ -112,11 +110,10 @@ class WebSocketChannel(HTTPChannel):
         self._loop = loop
         self._in_queue = asyncio.Queue()
         self.is_stopped = False
-        self.pending_requests: Dict[Dict[str]] = {}
+        self.pending_requests: dict[dict[str]] = {}
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """
-        Connect.
+        """Connect.
 
         Upon HTTP Channel connection, start the HTTP Server in its own thread.
 
@@ -127,15 +124,14 @@ class WebSocketChannel(HTTPChannel):
 
             try:
                 await self._start_ws_server()
-                self.logger.info("WebSocket Server has connected to port: {}.".format(self.port))
+                self.logger.info(f"WebSocket Server has connected to port: {self.port}.")
             except Exception:  # pragma: nocover # pylint: disable=broad-except
                 self.is_stopped = True
                 self._in_queue = None
-                self.logger.exception("Failed to start server on {}:{}.".format(self.host, self.port))
+                self.logger.exception(f"Failed to start server on {self.host}:{self.port}.")
 
     async def _http_handler(self, http_request: BaseRequest):
-        """
-        Verify the request then send the request to Agent as an envelope.
+        """Verify the request then send the request to Agent as an envelope.
 
         Note, this message handles the initiall http connection for the websocket.
 
@@ -152,7 +148,8 @@ class WebSocketChannel(HTTPChannel):
         await ws.prepare(http_request)
 
         if self._in_queue is None:  # pragma: nocover
-            raise ValueError("Channel not connected!")
+            msg = "Channel not connected!"
+            raise ValueError(msg)
 
         is_valid_request = self.api_spec.verify(request)
 
@@ -186,17 +183,17 @@ class WebSocketChannel(HTTPChannel):
             self.logger.info(f"Closing initial connection from {request.id}")
             await self.close_session(request.id, ws)
 
-        except asyncio.TimeoutError as err:
+        except TimeoutError as err:
             self.logger.warning(
                 dedent(f"""
-                Request timed out! Request={request} not handled as a result. 
+                Request timed out! Request={request} not handled as a result.
                 Ensure requests (protocol_id={HttpMessage.protocol_id}) are handled by a skill!"
                 """)
             )
             raise NotImplementedError from err
         except FuturesCancelledError as err:
             raise NotImplementedError from err
-        except BaseException as err:  # noqa
+        except BaseException as err:
             self.logger.exception("Error during handling incoming request")
             raise NotImplementedError from err
         finally:
@@ -205,15 +202,12 @@ class WebSocketChannel(HTTPChannel):
                 self.open_connections.pop(request.id, None)
 
     async def close_session(self, request_id: RequestId, ws) -> None:
-        """
-        Close the connection.
+        """Close the connection.
 
         :param request_id: the request id
         """
-        try:
+        with contextlib.suppress(AttributeError):
             await ws.close()
-        except AttributeError:
-            pass
         dialogue = self.pending_requests.pop(request_id, None)
         if dialogue is not None:
             msg = dialogue.reply(
@@ -224,9 +218,7 @@ class WebSocketChannel(HTTPChannel):
             await self.send_msg_to_agent(msg)
 
     async def send_msg_to_agent(self, msg):
-        """
-        Send a message to the agent.
-        """
+        """Send a message to the agent."""
         envelope = Envelope(
             to=str(self.target_skill_id),
             sender=str(self.connection_id),
@@ -235,8 +227,7 @@ class WebSocketChannel(HTTPChannel):
         await self._in_queue.put(envelope)
 
     async def _inbound_wss_handler(self, http_request: BaseRequest, websocket_message: WSMessage):
-        """
-        Verify the request then send the request to Agent as an envelope.
+        """Verify the request then send the request to Agent as an envelope.
 
         Note, this message handles the initiall http connection for the websocket.
 
@@ -247,7 +238,8 @@ class WebSocketChannel(HTTPChannel):
         :return: a tuple of response code and response description
         """
         if self._in_queue is None:  # pragma: nocover
-            raise ValueError("Channel not connected!")
+            msg = "Channel not connected!"
+            raise ValueError(msg)
 
         self.logger.debug(f"Received inbound message from websocket client: {websocket_message}")
 
@@ -256,17 +248,11 @@ class WebSocketChannel(HTTPChannel):
         await self.send_msg_to_agent(msg)
 
     async def _handle_new_client(self, http_request: BaseRequest = None, url=None, sid=None, sio=None, ws=None) -> None:
-        """
-
-        We want to create our reponse which will basically be the websocket connection.
-        """
+        """We want to create our reponse which will basically be the websocket connection."""
         if url is None and http_request is not None:
             url = http_request.id.get_incomplete_version().dialogue_reference[0]
 
-        if http_request is not None:
-            session_id = http_request.id
-        else:
-            session_id = sid
+        session_id = http_request.id if http_request is not None else sid
 
         request, dialogue = self._websocket_dialogues.create(
             counterparty=str(self.target_skill_id),
@@ -295,9 +281,7 @@ class WebSocketChannel(HTTPChannel):
         return request, dialogue
 
     async def _handle_existing_client(self, http_request: BaseRequest, websocket_message: WSMessage) -> None:
-        """
-        Retrieve the existing request and add the message to the queue.
-        """
+        """Retrieve the existing request and add the message to the queue."""
         websocket_dialogue = self.pending_requests[http_request.id]
         # we need to get the existing request.
         request = websocket_dialogue.reply(
@@ -315,7 +299,7 @@ class WebSocketChannel(HTTPChannel):
 
         @sio.on("*")
         async def catch_all(event, sid, data):
-            if event in ["connect", "disconnect", "agent"]:
+            if event in {"connect", "disconnect", "agent"}:
                 return
             self.logger.debug(f"Received message from client: {event}")
 
@@ -338,10 +322,8 @@ class WebSocketChannel(HTTPChannel):
 
         @sio.on("disconnect")
         async def disconnect(sid):
-            try:
+            with contextlib.suppress(AttributeError):
                 await self.close_session(sid, sio)
-            except AttributeError:
-                pass
             self.logger.info(f"Closed websocket dialogue for request id: {sid}")
             dialogues = self.pending_requests.pop(sid, None)
             if dialogues is not None:
@@ -363,13 +345,13 @@ class WebSocketChannel(HTTPChannel):
         await self.wss_server.start()
 
     async def send(self, envelope: Envelope) -> None:  # pylint: disable=W0236
-        """
-        Send the envelope in_queue.
+        """Send the envelope in_queue.
 
         :param envelope: the envelope
         """
         if self.wss_server is None:  # pragma: nocover
-            raise ValueError("Server not connected, call connect first!")
+            msg = "Server not connected, call connect first!"
+            raise ValueError(msg)
 
         message = cast(WebsocketsMessage, envelope.message)
         if envelope.protocol_specification_id == HttpMessage.protocol_id:
@@ -380,10 +362,11 @@ class WebSocketChannel(HTTPChannel):
             future = self.pending_requests.pop(dialogue.incomplete_dialogue_label, None)
             await self.send_message_to_client(message, dialogue)
         else:
-            raise ValueError(f"Unsupported protocol specification id: {envelope.protocol_specification_id}")
+            msg = f"Unsupported protocol specification id: {envelope.protocol_specification_id}"
+            raise ValueError(msg)
 
         if dialogue is None:
-            self.logger.warning("Could not create dialogue for message={}".format(message))
+            self.logger.warning(f"Could not create dialogue for message={message}")
             return
 
         if not future:
@@ -391,10 +374,8 @@ class WebSocketChannel(HTTPChannel):
         if not future.done():
             future.set_result(message)
 
-    async def send_message_to_client(self, message, dialogue) -> Optional[Envelope]:
-        """
-        send message to a existing client.
-        """
+    async def send_message_to_client(self, message, dialogue) -> Envelope | None:
+        """Send message to a existing client."""
         if message.performative == WebsocketsMessage.Performative.CONNECTION_ACK:
             return None
 
@@ -402,10 +383,10 @@ class WebSocketChannel(HTTPChannel):
         if message.performative == WebsocketsMessage.Performative.SEND:
             http_dialogue_ref = ws_dialogues_to_connections.get(dialogue.incomplete_dialogue_label, None)
             if http_dialogue_ref is None:
-                self.logger.warning("Could not locate http dialogue for message={}".format(message))
+                self.logger.warning(f"Could not locate http dialogue for message={message}")
                 msg = dialogue.reply(
                     performative=WebsocketsMessage.Performative.DISCONNECT,
-                    reason="Could not locate http dialogue for message={}".format(message),
+                    reason=f"Could not locate http dialogue for message={message}",
                 )
                 await self.send_msg_to_agent(msg)
                 return None
@@ -413,22 +394,22 @@ class WebSocketChannel(HTTPChannel):
             try:
                 await dialogue.ws.send_str(message.data)
             except ConnectionResetError:
-                self.logger.warning("Could not locate http dialogue for message={}".format(message))
+                self.logger.warning(f"Could not locate http dialogue for message={message}")
                 msg = dialogue.reply(
                     performative=WebsocketsMessage.Performative.DISCONNECT,
-                    reason="Could not locate http dialogue for message={}".format(message),
+                    reason=f"Could not locate http dialogue for message={message}",
                 )
                 await self.send_msg_to_agent(msg)
                 return None
 
     async def disconnect(self) -> None:
-        """
-        Disconnect.
+        """Disconnect.
 
         Shut-off the HTTP Server.
         """
         if self.wss_server is None:  # pragma: nocover
-            raise ValueError("Server not connected, call connect first!")
+            msg = "Server not connected, call connect first!"
+            raise ValueError(msg)
 
         if not self.is_stopped:
             await self.wss_server.stop()
@@ -446,8 +427,7 @@ class WebSocketServerConnection(HTTPServerConnection):
     client_connections = {}
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize the connection.
+        """Initialize the connection.
 
         The configuration must be specified if and only if the following
         parameters are None: connection_id, excluded_protocols or restricted_to_protocols.
@@ -464,7 +444,7 @@ class WebSocketServerConnection(HTTPServerConnection):
         """
 
         super().__init__(**kwargs)
-        api_spec_path = cast(Optional[str], self.configuration.config.get("api_spec_path"))
+        api_spec_path = cast(str | None, self.configuration.config.get("api_spec_path"))
         self.channel = WebSocketChannel(
             address=self.address,
             logger=self.logger,
@@ -476,24 +456,21 @@ class WebSocketServerConnection(HTTPServerConnection):
         )
 
     async def connect(self) -> None:
-        """
-        Set up the connection.
+        """Set up the connection.
 
         In the implementation, remember to update 'connection_status' accordingly.
         """
         await super().connect()
 
     async def disconnect(self) -> None:
-        """
-        Tear down the connection.
+        """Tear down the connection.
 
         In the implementation, remember to update 'connection_status' accordingly.
         """
         await super().disconnect()
 
     async def send(self, envelope: Envelope) -> None:
-        """
-        Send an envelope back to the client. This is the initial HTTP response.
+        """Send an envelope back to the client. This is the initial HTTP response.
 
         :param envelope: the envelope to send.
         """
@@ -504,9 +481,8 @@ class WebSocketServerConnection(HTTPServerConnection):
         elif envelope.protocol_specification_id == WebsocketsMessage.protocol_id:
             await self.channel.send(envelope)
 
-    async def receive(self, *args: Any, **kwargs: Any) -> Optional[Envelope]:
-        """
-        Receive an envelope. Blocking.
+    async def receive(self, *args: Any, **kwargs: Any) -> Envelope | None:
+        """Receive an envelope. Blocking.
 
         :param args: arguments to receive
         :param kwargs: keyword arguments to receive

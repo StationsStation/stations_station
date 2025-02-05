@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -42,10 +41,10 @@ class TestDialoguesPrometheus(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=PrometheusMessage.Performative.ADD_METRIC,
-            type="some str",
-            title="some str",
-            description="some str",
-            labels={"some str": "some str"},
-        )
+        return {
+            "performative": PrometheusMessage.Performative.ADD_METRIC,
+            "type": "some str",
+            "title": "some str",
+            "description": "some str",
+            "labels": {"some str": "some str"},
+        }

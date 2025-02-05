@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -25,7 +24,7 @@ import re
 import ssl
 import asyncio
 import logging
-from typing import Tuple, cast
+from typing import cast
 from traceback import print_exc
 from unittest.mock import Mock, MagicMock, patch
 
@@ -57,8 +56,7 @@ ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
 
 class RegexComparator(str):  # noqa
-    """
-    Helper class to assert calls of mocked method with string arguments.
+    """Helper class to assert calls of mocked method with string arguments.
     It will use regex matching as equality comparator.
     """
 
@@ -73,8 +71,7 @@ class HttpDialogues(BaseHttpDialogues):
     """The dialogues class keeps track of all http dialogues."""
 
     def __init__(self, self_address: Address) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :return: None
         """
@@ -82,7 +79,7 @@ class HttpDialogues(BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -103,8 +100,7 @@ class TestHTTPServer:
     """Tests for HTTPServer connection."""
 
     async def request(self, method: str, path: str, **kwargs) -> ClientResponse:
-        """
-        Make a http request.
+        """Make a http request.
 
         :param method: HTTP method: GET, POST etc
         :param path: path to request on server. full url constructed automatically
@@ -156,7 +152,7 @@ class TestHTTPServer:
         await self.http_connection.channel.disconnect()
         assert self.http_connection.channel.is_stopped
 
-    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[HttpMessage, HttpDialogue]:
+    def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[HttpMessage, HttpDialogue]:
         message = cast(HttpMessage, envelope.message)
         dialogue = cast(HttpDialogue, self._dialogues.update(message))
         assert dialogue is not None
@@ -191,7 +187,9 @@ class TestHTTPServer:
             timeout=20,
         )
 
-        assert response.status == 200 and response.reason == "Success" and await response.text() == "Response body"
+        assert response.status == 200
+        assert response.reason == "Success"
+        assert await response.text() == "Response body"
 
     @pytest.mark.asyncio
     async def test_header_content_type(self):
@@ -222,7 +220,9 @@ class TestHTTPServer:
             request_task,
             timeout=20,
         )
-        assert response.status == 200 and response.reason == "Success" and await response.text() == "Response body"
+        assert response.status == 200
+        assert response.reason == "Success"
+        assert await response.text() == "Response body"
         assert response.headers["Content-Type"] == content_type
 
     @pytest.mark.asyncio
@@ -260,7 +260,9 @@ class TestHTTPServer:
 
         response = await asyncio.wait_for(request_task, timeout=10)
 
-        assert response.status == 408 and response.reason == "Request Timeout" and await response.text() == ""
+        assert response.status == 408
+        assert response.reason == "Request Timeout"
+        assert await response.text() == ""
 
     @pytest.mark.asyncio
     async def test_late_message_get_timeout_error(self):
@@ -292,7 +294,9 @@ class TestHTTPServer:
 
         response = await asyncio.wait_for(request_task, timeout=10)
 
-        assert response.status == 408 and response.reason == "Request Timeout" and await response.text() == ""
+        assert response.status == 408
+        assert response.reason == "Request Timeout"
+        assert await response.text() == ""
 
     @pytest.mark.asyncio
     async def test_post_201(self):
@@ -327,21 +331,27 @@ class TestHTTPServer:
             request_task,
             timeout=20,
         )
-        assert response.status == 201 and response.reason == "Created" and await response.text() == "Response body"
+        assert response.status == 201
+        assert response.reason == "Created"
+        assert await response.text() == "Response body"
 
     @pytest.mark.asyncio
     async def test_get_404(self):
         """Test send post request w/ 404 response."""
         response = await self.request("get", "/url-non-exists")
 
-        assert response.status == 404 and response.reason == "Request Not Found" and await response.text() == ""
+        assert response.status == 404
+        assert response.reason == "Request Not Found"
+        assert await response.text() == ""
 
     @pytest.mark.asyncio
     async def test_post_404(self):
         """Test send post request w/ 404 response."""
         response = await self.request("get", "/url-non-exists", data="some data")
 
-        assert response.status == 404 and response.reason == "Request Not Found" and await response.text() == ""
+        assert response.status == 404
+        assert response.reason == "Request Not Found"
+        assert await response.text() == ""
 
     @pytest.mark.asyncio
     async def test_get_408(self):
@@ -352,7 +362,9 @@ class TestHTTPServer:
             response = await self.request("get", "/pets")
             mock_logger.assert_any_call(RegexComparator("Request timed out! Request=.*"))
 
-        assert response.status == 408 and response.reason == "Request Timeout" and await response.text() == ""
+        assert response.status == 408
+        assert response.reason == "Request Timeout"
+        assert await response.text() == ""
 
     @pytest.mark.asyncio
     async def test_post_408(self):
@@ -360,7 +372,9 @@ class TestHTTPServer:
         self.http_connection.channel.timeout_window = 0.1
         response = await self.request("post", "/pets", data="somedata")
 
-        assert response.status == 408 and response.reason == "Request Timeout" and await response.text() == ""
+        assert response.status == 408
+        assert response.reason == "Request Timeout"
+        assert await response.text() == ""
 
     @pytest.mark.asyncio
     async def test_send_connection_drop(self):
@@ -440,7 +454,9 @@ class TestHTTPServer:
                 timeout=20,
             )
 
-        assert response and response.status == 500 and response.reason == "Server Error"
+        assert response
+        assert response.status == 500
+        assert response.reason == "Server Error"
 
     def teardown(self):
         """Teardown the test case."""
@@ -464,8 +480,7 @@ class TestHTTPSServer:
     """Tests for HTTPServer connection."""
 
     async def request(self, method: str, path: str, **kwargs) -> ClientResponse:
-        """
-        Make a http request.
+        """Make a http request.
 
         :param method: HTTP method: GET, POST etc
         :param path: path to request on server. full url constructed automatically
@@ -544,9 +559,11 @@ class TestHTTPSServer:
             timeout=20,
         )
 
-        assert response.status == 200 and response.reason == "Success" and await response.text() == "Response body"
+        assert response.status == 200
+        assert response.reason == "Success"
+        assert await response.text() == "Response body"
 
-    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[HttpMessage, HttpDialogue]:
+    def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[HttpMessage, HttpDialogue]:
         message = cast(HttpMessage, envelope.message)
         dialogue = cast(HttpDialogue, self._dialogues.update(message))
         assert dialogue is not None

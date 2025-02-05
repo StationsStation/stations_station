@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -44,8 +43,7 @@ class HttpHandler(Handler):
         """Implement the setup."""
 
     def handle(self, message: Message) -> None:
-        """
-        Implement the reaction to an envelope.
+        """Implement the reaction to an envelope.
 
         :param message: the message
         """
@@ -65,8 +63,7 @@ class HttpHandler(Handler):
             self._handle_invalid(http_msg, http_dialogue)
 
     def _handle_unidentified_dialogue(self, http_msg: HttpMessage) -> None:
-        """
-        Handle an unidentified dialogue.
+        """Handle an unidentified dialogue.
 
         :param http_msg: the message
         """
@@ -82,8 +79,7 @@ class HttpHandler(Handler):
         self.context.outbox.put_message(message=default_msg)
 
     def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """
-        Handle a Http request.
+        """Handle a Http request.
 
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
@@ -97,8 +93,7 @@ class HttpHandler(Handler):
             self._handle_invalid(http_msg, http_dialogue)
 
     def _handle_get(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """
-        Handle a Http request of verb GET.
+        """Handle a Http request of verb GET.
 
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
@@ -124,8 +119,7 @@ class HttpHandler(Handler):
         self.context.outbox.put_message(message=http_response)
 
     def _handle_post(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """
-        Handle a Http request of verb POST.
+        """Handle a Http request of verb POST.
 
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
@@ -143,15 +137,14 @@ class HttpHandler(Handler):
         self.context.outbox.put_message(message=http_response)
 
     def _handle_invalid(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """
-        Handle an invalid http message.
+        """Handle an invalid http message.
 
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
         self.context.logger.warning(
             f"""
-            Cannot handle http message of 
+            Cannot handle http message of
             performative={http_msg.performative}
             dialogue={http_dialogue.dialogue_label}.
             """

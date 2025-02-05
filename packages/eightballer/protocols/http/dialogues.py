@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 fetchai
@@ -17,15 +16,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the classes required for http dialogue management.
+"""This module contains the classes required for http dialogue management.
 
 - HttpDialogue: The dialogue class maintains state of a dialogue and manages it.
 - HttpDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import cast
+from collections.abc import Callable
 
 from aea.common import Address
 from aea.protocols.base import Message
@@ -37,9 +36,9 @@ from packages.eightballer.protocols.http.message import HttpMessage
 class HttpDialogue(Dialogue):
     """The http dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({HttpMessage.Performative.REQUEST})
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({HttpMessage.Performative.RESPONSE})
-    VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
+    INITIAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset({HttpMessage.Performative.REQUEST})
+    TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset({HttpMessage.Performative.RESPONSE})
+    VALID_REPLIES: dict[Message.Performative, frozenset[Message.Performative]] = {
         HttpMessage.Performative.REQUEST: frozenset({HttpMessage.Performative.RESPONSE}),
         HttpMessage.Performative.RESPONSE: frozenset(),
     }
@@ -60,10 +59,9 @@ class HttpDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[HttpMessage] = HttpMessage,
+        message_class: type[HttpMessage] = HttpMessage,
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -90,10 +88,9 @@ class HttpDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
-        dialogue_class: Type[HttpDialogue] = HttpDialogue,
+        dialogue_class: type[HttpDialogue] = HttpDialogue,
     ) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: the address of the entity for whom dialogues are maintained
         :param dialogue_class: the dialogue class used
@@ -102,7 +99,7 @@ class HttpDialogues(Dialogues, ABC):
         Dialogues.__init__(
             self,
             self_address=self_address,
-            end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
+            end_states=cast(frozenset[Dialogue.EndState], self.END_STATES),
             message_class=HttpMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,

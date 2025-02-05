@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -22,10 +21,11 @@
 import asyncio
 import logging
 from abc import abstractmethod
-from typing import Any, Set, Dict, Callable, Optional, cast
+from typing import Any, Optional, cast
 from asyncio.events import AbstractEventLoop
+from collections.abc import Callable
 
-import redis.asyncio as redis  # noqa: F401,E0611
+import redis.asyncio as redis
 from aea.common import Address
 from aea.mail.base import Message, Envelope
 from aea.connections.base import Connection, ConnectionStates
@@ -49,8 +49,7 @@ class PubsubDialogues(BasePubsubDialogues):
     """The dialogues class keeps track of all redis dialogues."""
 
     def __init__(self, self_address: Address, **kwargs) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: self address
         :param kwargs: keyword arguments
@@ -59,7 +58,7 @@ class PubsubDialogues(BasePubsubDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> Dialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -85,8 +84,7 @@ class BaseAsyncChannel:
         connection_id: PublicId,
         message_type: Message,
     ):
-        """
-        Initialize the BaseAsyncChannel channel.
+        """Initialize the BaseAsyncChannel channel.
 
         :param agent_address: the address of the agent.
         :param connection_id: the id of the connection.
@@ -99,9 +97,9 @@ class BaseAsyncChannel:
 
         self.is_stopped = True
         self._connection = None
-        self._tasks: Set[asyncio.Task] = set()
-        self._in_queue: Optional[asyncio.Queue] = None
-        self._loop: Optional[asyncio.AbstractEventLoop] = None
+        self._tasks: set[asyncio.Task] = set()
+        self._in_queue: asyncio.Queue | None = None
+        self._loop: asyncio.AbstractEventLoop | None = None
         self.logger = _default_logger
         self._subscriptions = {}
         self._dialogues = None
@@ -112,7 +110,7 @@ class BaseAsyncChannel:
     @abstractmethod
     def performative_handlers(
         self,
-    ) -> Dict[Message.Performative, Callable[[Message, Dialogue], Message]]:
+    ) -> dict[Message.Performative, Callable[[Message, Dialogue], Message]]:
         """Performative to message handler mapping."""
 
     @abstractmethod
@@ -124,8 +122,7 @@ class BaseAsyncChannel:
         """Disconnect channel."""
 
     async def send(self, envelope: Envelope) -> None:
-        """
-        Send an envelope with a protocol message.
+        """Send an envelope with a protocol message.
 
         It sends the envelope, waits for and receives the result.
         The result is translated into a response envelope.
@@ -135,10 +132,12 @@ class BaseAsyncChannel:
         """
 
         if not (self._loop and self._connection):
-            raise ConnectionError("{self.__class__.__name__} not connected, call connect first!")
+            msg = "{self.__class__.__name__} not connected, call connect first!"
+            raise ConnectionError(msg)
 
         if not isinstance(envelope.message, self.message_type):
-            raise TypeError(f"Message not of type {self.message_type}")
+            msg = f"Message not of type {self.message_type}"
+            raise TypeError(msg)
 
         message = envelope.message
 
@@ -168,7 +167,7 @@ class BaseAsyncChannel:
 
         await self._in_queue.put(response_envelope)
 
-    async def get_message(self) -> Optional[Envelope]:
+    async def get_message(self) -> Envelope | None:
         """Check the in-queue for envelopes."""
 
         if self.is_stopped:
@@ -180,7 +179,7 @@ class BaseAsyncChannel:
             if res is None:
                 return None
             channel = res["channel"].decode("utf-8")
-            envelope = Envelope(
+            return Envelope(
                 to=self.target_skill_id,
                 sender=str(self.connection_id),
                 message=PubsubMessage(
@@ -189,7 +188,6 @@ class BaseAsyncChannel:
                     data=res["data"],
                 ),
             )
-            return envelope
         except asyncio.QueueEmpty:
             return None
 
@@ -204,10 +202,10 @@ class BaseAsyncChannel:
         for task in list(self._tasks):
             try:
                 await task
-            except KeyboardInterrupt:  # noqa
+            except KeyboardInterrupt:
                 raise
             except BaseException:  # noqa
-                pass  # noqa
+                pass
 
 
 class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attributes
@@ -221,8 +219,7 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
         connection_id: PublicId,
         **kwargs,
     ):
-        """
-        Initialize the Redis channel.
+        """Initialize the Redis channel.
 
         :param agent_address: the address of the agent.
         :param connection_id: the id of the connection.
@@ -237,8 +234,7 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
         self.logger.debug("Initialised the Redis channel")
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """
-        Connect channel using loop.
+        """Connect channel using loop.
 
         :param loop: asyncio event loop to use
         """
@@ -254,10 +250,11 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
                 )
                 self._pubsub = self._connection.pubsub()
                 self.logger.info("Redis has connected.")
-            except Exception as err:  # noqa
+            except Exception as err:
                 self.is_stopped = True
                 self._in_queue = None
-                raise ConnectionError(f"Failed to start Redis: {err}") from err
+                msg = f"Failed to start Redis: {err}"
+                raise ConnectionError(msg) from err
 
     async def disconnect(self) -> None:
         """Disconnect channel."""
@@ -267,14 +264,14 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
 
         await self._cancel_tasks()
         await self._pubsub.close()
-        await self._connection.close()  # noqa
+        await self._connection.close()
         self.is_stopped = True
         self.logger.info("Redis has shutdown.")
 
     @property
     def performative_handlers(
         self,
-    ) -> Dict[
+    ) -> dict[
         PubsubMessage.Performative,
         Callable[[PubsubMessage, PubsubDialogue], PubsubMessage],
     ]:
@@ -287,72 +284,67 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
         }
 
     async def subscribe(self, message: PubsubMessage, dialogue: PubsubDialogue) -> PubsubMessage:
-        """Handle PubsubMessage with SUBSCRIBE Perfomative"""
+        """Handle PubsubMessage with SUBSCRIBE Perfomative."""
 
         await self._pubsub.subscribe(",".join(message.channels))
 
         for channel in message.channels:
             self.logger.info(f"Subscribed to channel {channel}")
             self._subscriptions[channel] = dialogue
-        response_message = dialogue.reply(
+        return dialogue.reply(
             performative=PubsubMessage.Performative.SUBSCRIBED,
             channel=str(message.channels),
             success=True,
             info="Subscribed to channel",
         )
-        return response_message
 
     def unsubscribe(self, message: PubsubMessage, dialogue: PubsubDialogue) -> PubsubMessage:
-        """Handle PubsubMessage with UNSUBSCRIBE Perfomative"""
+        """Handle PubsubMessage with UNSUBSCRIBE Perfomative."""
 
         message.channels  # noqa
 
-        response_message = dialogue.reply(
+        dialogue.reply(
             performative=PubsubMessage.Performative.UNSUBSCRIBED,
-            channel=...,  # noqa
-            success=...,  # noqa
-            info=...,  # noqa
+            channel=...,
+            success=...,
+            info=...,
         )
 
-        response_message = dialogue.reply(
+        return dialogue.reply(
             performative=PubsubMessage.Performative.ERROR,
-            data=...,  # noqa
+            data=...,
         )
-
-        return response_message
 
     async def publish(
         self,
         message: PubsubMessage,
         dialogue: PubsubDialogue,  # pylint: disable=unused-argument
     ) -> PubsubMessage:
-        """Handle PubsubMessage with PUBLISH Perfomative"""
+        """Handle PubsubMessage with PUBLISH Perfomative."""
 
         del dialogue  # this needs to be fixed
-        channel = message.channel  # noqa
-        data = message.message  # noqa
+        channel = message.channel
+        data = message.message
         await self._connection.publish(channel, data)
 
     def message(self, message: PubsubMessage, dialogue: PubsubDialogue) -> PubsubMessage:
-        """Handle PubsubMessage with MESSAGE Perfomative"""
+        """Handle PubsubMessage with MESSAGE Perfomative."""
 
         message.channel  # noqa
         message.data  # noqa
 
         # TODO: Implement the necessary logic required for the response message  # noqa
 
-        response_message = dialogue.reply(
+        dialogue.reply(
             performative=PubsubMessage.Performative.MESSAGE,
-            channel=...,  # noqa
-            data=...,  # noqa
+            channel=...,
+            data=...,
         )
 
-        response_message = dialogue.reply(
+        return dialogue.reply(
             performative=PubsubMessage.Performative.ERROR,
-            data=...,  # noqa
+            data=...,
         )
-
-        return response_message
 
 
 class RedisConnection(Connection):
@@ -361,8 +353,7 @@ class RedisConnection(Connection):
     connection_id = CONNECTION_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize a Redis connection.
+        """Initialize a Redis connection.
 
         :param kwargs: keyword arguments
         """
@@ -402,8 +393,7 @@ class RedisConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: Envelope) -> None:
-        """
-        Send an envelope.
+        """Send an envelope.
 
         :param envelope: the envelope to send.
         """
@@ -412,8 +402,7 @@ class RedisConnection(Connection):
         return await self.channel.send(envelope)
 
     async def receive(self, *args, **kwargs: Any) -> Optional[Envelope]:  # noqa
-        """
-        Receive an envelope. Blocking.
+        """Receive an envelope. Blocking.
 
         :param args: arguments to receive
         :param kwargs: keyword arguments to receive
@@ -424,8 +413,7 @@ class RedisConnection(Connection):
         try:
             if self.channel.is_stopped:
                 return None
-            result = await self.channel.get_message()
-            return result
+            return await self.channel.get_message()
         except Exception as err:  # noqa
             self.logger.info(f"Exception on receive {err}")
             return None

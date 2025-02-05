@@ -1,5 +1,3 @@
-# noqa: A005
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 fetchai
@@ -18,8 +16,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the support resources for the http protocol.
+"""This module contains the support resources for the http protocol.
 
 It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea version `1.8.0`.
 """

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -17,8 +16,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the support resources for the websockets protocol.
+"""This module contains the support resources for the websockets protocol.
 
 It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea protocol generator version `1.0.0`.
 """

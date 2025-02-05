@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -23,7 +22,7 @@ import os
 import socket
 import asyncio
 import logging
-from typing import Tuple, cast
+from typing import cast
 from traceback import print_exc
 from unittest.mock import MagicMock
 
@@ -61,7 +60,7 @@ def get_unused_tcp_port() -> int:
     """Get an unused TCP port."""
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((get_host(), 0))  # noqa
+        s.bind((get_host(), 0))
         return s.getsockname()[1]
 
 
@@ -69,8 +68,7 @@ class HttpDialogues(BaseHttpDialogues):
     """The dialogues class keeps track of all http dialogues."""
 
     def __init__(self, self_address: Address) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :return: None
         """
@@ -78,7 +76,7 @@ class HttpDialogues(BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -99,8 +97,7 @@ class TestWebSocketServer:
     """Tests for HTTPServer connection."""
 
     async def request(self, method: str, path: str, **kwargs) -> ClientResponse:
-        """
-        Make a http request.
+        """Make a http request.
 
         :param method: HTTP method: GET, POST etc
         :param path: path to request on server. full url constructed automatically
@@ -109,10 +106,9 @@ class TestWebSocketServer:
         """
         try:
             url = f"http://{self.host}:{self.port}{path}"
-            async with aiohttp.ClientSession() as session:
-                async with session.request(method, url, **kwargs) as resp:
-                    await resp.read()
-                    return resp
+            async with aiohttp.ClientSession() as session, session.request(method, url, **kwargs) as resp:
+                await resp.read()
+                return resp
         except Exception:
             print_exc()
             raise
@@ -153,7 +149,7 @@ class TestWebSocketServer:
         await self.wss_connection.channel.disconnect()
         assert self.wss_connection.channel.is_stopped
 
-    def _get_message_and_dialogue(self, envelope: Envelope) -> Tuple[HttpMessage, HttpDialogue]:
+    def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[HttpMessage, HttpDialogue]:
         message = cast(HttpMessage, envelope.message)
         dialogue = cast(HttpDialogue, self._dialogues.update(message))
         assert dialogue is not None

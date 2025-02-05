@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -20,7 +19,7 @@
 """This package contains a scaffold of a handler."""
 
 import json
-from typing import Any, Dict, Optional, SupportsFloat, cast
+from typing import Any, SupportsFloat, cast
 
 from aea.skills.base import Handler
 from aea.protocols.base import Message
@@ -45,8 +44,7 @@ class PrometheusHandler(Handler):
         self.context.logger.info("setting up PrometheusHandler")
 
     def handle(self, message: Message) -> None:
-        """
-        Implement the reaction to a message.
+        """Implement the reaction to a message.
 
         :param message: the message
         """
@@ -67,20 +65,19 @@ class PrometheusHandler(Handler):
             )
 
     def _handle_unidentified_dialogue(self, msg: Message) -> None:
-        """
-        Handle an unidentified dialogue.
+        """Handle an unidentified dialogue.
 
         :param msg: the unidentified message to be handled
         """
 
-        self.context.logger.info("received invalid message={}, unidentified dialogue.".format(msg))
+        self.context.logger.info(f"received invalid message={msg}, unidentified dialogue.")
 
     def teardown(self) -> None:
         """Teardown the handler."""
 
 
-def find(dotted_path: str, data: Dict[str, Any]) -> Optional[Any]:
-    """Find entry at dotted_path in data"""
+def find(dotted_path: str, data: dict[str, Any]) -> Any | None:
+    """Find entry at dotted_path in data."""
 
     keys = dotted_path.split(".")
     value = data
@@ -90,7 +87,7 @@ def find(dotted_path: str, data: Dict[str, Any]) -> Optional[Any]:
 
 
 def is_number(value: SupportsFloat) -> bool:
-    """Test if value is a number"""
+    """Test if value is a number."""
     if value is None:
         return False
     try:
@@ -116,8 +113,7 @@ class HttpHandler(Handler):
         self.context.logger.info("setting up HttpHandler")
 
     def handle(self, message: Message) -> None:
-        """
-        Implement the reaction to a message.
+        """Implement the reaction to a message.
 
         :param message: the message
         """
@@ -139,8 +135,7 @@ class HttpHandler(Handler):
             self.context.logger.info(f"got unexpected http message: code = {message.status_code}")
 
     def _handle_response(self, http_msg: HttpMessage) -> None:
-        """
-        Handle an Http response.
+        """Handle an Http response.
 
         :param http_msg: the http message
         """
@@ -177,18 +172,13 @@ class HttpHandler(Handler):
             )
 
     def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """
-        Handle a Http request.
+        """Handle a Http request.
 
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
         self.context.logger.debug(
-            "received http request with method={}, url={} and body={!r}".format(
-                http_msg.method,
-                http_msg.url,
-                http_msg.body,
-            )
+            f"received http request with method={http_msg.method}, url={http_msg.url} and body={http_msg.body!r}"
         )
 
         if http_msg.method == "get":
@@ -197,8 +187,7 @@ class HttpHandler(Handler):
             self.context.logger.info("method 'post' is not supported.")
 
     def _handle_get(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """
-        Handle a Http request of verb GET.
+        """Handle a Http request of verb GET.
 
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
@@ -216,7 +205,7 @@ class HttpHandler(Handler):
             headers=http_msg.headers,
             body=json.dumps(data).encode("utf-8"),
         )
-        self.context.logger.debug("responding with: {}".format(http_response))
+        self.context.logger.debug(f"responding with: {http_response}")
         self.context.outbox.put_message(message=http_response)
 
         if self.context.prometheus_dialogues.enabled:
@@ -224,12 +213,11 @@ class HttpHandler(Handler):
             self.context.behaviours.prometheus_behaviour.update_prometheus_metric(metric_name, "inc", 1.0, {})
 
     def _handle_unidentified_dialogue(self, msg: Message) -> None:
-        """
-        Handle an unidentified dialogue.
+        """Handle an unidentified dialogue.
 
         :param msg: the unidentified message to be handled
         """
-        self.context.logger.info("received invalid message={}, unidentified dialogue.".format(msg))
+        self.context.logger.info(f"received invalid message={msg}, unidentified dialogue.")
 
     def teardown(self) -> None:
         """Teardown the handler."""

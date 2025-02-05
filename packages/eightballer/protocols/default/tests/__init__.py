@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 fetchai
@@ -17,8 +16,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the support resources for the default protocol.
+"""This module contains the support resources for the default protocol.
 
 It was created with protocol buffer compiler version `libprotoc 3.17.3` and aea version `1.4.0`.
 """

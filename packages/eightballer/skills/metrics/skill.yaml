@@ -8,18 +8,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
-  __init__.py: bafybeibe74nso5vkkzrpukuo3ezoogflifkb6j6olmkj3gihhkzvmfxppy
-  dialogues.py: bafybeigmngosmm4kqcuajmc5avnrhlc65argdlimlc54zetcnf5r2r62my
-  handlers.py: bafybeifpza7nwblsw5bqpu2yxcoo3ukenlc3oxnl65ojzwaokh55q3ahka
+  __init__.py: bafybeid5462ekyrcitxhganoexoc6kxcofdy245evwdpprf3uwfpek7fcq
+  dialogues.py: bafybeihsi3gt3e5yz3tmfiqohg3lku4zp2vfgcvf67gitodfky22vbdrbe
+  handlers.py: bafybeicoqd3eouvvtzf2x6sj23ismuku7qoikslwhkmfsvq2xps5dv7rcq
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
   tests/test_metrics.py: bafybeifcvrhrlnhnjwbjzedwoegkzfocptui5jkdycf7ydqed2ck76zes4
-  tests/test_metrics_dialogues.py: bafybeign4wrziouuemo4cdw457qyyrhzbam62pggfcvfhxuqphj7ye5c4u
+  tests/test_metrics_dialogues.py: bafybeihdsbz3ocysfuqm3calcwjv5isafawvhbsdgz7rammmlsmqt7wwtu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeif3jvxr64yrl6qmsjy25kpg76lmvwzlpvln5g6v5gne366gjfwcvq
-- eightballer/http:0.1.0:bafybeieoom2ajzvurwsjbivx23dwilarfzkihgqpgqp43ypowpr5xdyjr4
+- eightballer/default:0.1.0:bafybeigyjou5vodsbobshik523ykweos7ir4qz2lw4h6kjkqjlwrk4p3fa
+- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
 skills: []
 behaviours: {}
 handlers:

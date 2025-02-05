@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -42,7 +41,7 @@ class TestDialoguesPubsub(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=PubsubMessage.Performative.SUBSCRIBE,
-            channels=("some str",),
-        )
+        return {
+            "performative": PubsubMessage.Performative.SUBSCRIBE,
+            "channels": ("some str",),
+        }

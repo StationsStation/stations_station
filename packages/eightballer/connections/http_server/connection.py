@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 8baller
@@ -25,7 +24,7 @@ import email
 import asyncio
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, cast
+from typing import Any, Optional, cast
 from asyncio import CancelledError
 from textwrap import dedent
 from traceback import format_exc
@@ -81,8 +80,7 @@ class HttpDialogues(BaseHttpDialogues):
     """The dialogues class keeps track of all http dialogues."""
 
     def __init__(self, self_address: Address, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: address of the dialogues maintainer.
         :param kwargs: keyword arguments.
@@ -91,7 +89,7 @@ class HttpDialogues(BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -108,9 +106,8 @@ class HttpDialogues(BaseHttpDialogues):
         )
 
 
-def headers_to_string(headers: Dict) -> str:
-    """
-    Convert headers to string.
+def headers_to_string(headers: dict) -> str:
+    """Convert headers to string.
 
     :param headers: dict
 
@@ -141,9 +138,8 @@ class Request(OpenAPIRequest):
         self._id = request_id
 
     @classmethod
-    async def create(cls, http_request: BaseRequest, extra_headers: Dict[str, str] = None) -> "Request":
-        """
-        Create a request.
+    async def create(cls, http_request: BaseRequest, extra_headers: dict[str, str] | None = None) -> "Request":
+        """Create a request.
 
         :param http_request: http_request
         :return: a request
@@ -186,8 +182,7 @@ class Request(OpenAPIRequest):
         dialogues: HttpDialogues,
         target_skill_id: PublicId,
     ) -> Envelope:
-        """
-        Process incoming API request by packaging into Envelope and sending it in-queue.
+        """Process incoming API request by packaging into Envelope and sending it in-queue.
 
         :param dialogues: the http dialogues
         :param target_skill_id: the target skill id
@@ -206,12 +201,11 @@ class Request(OpenAPIRequest):
         )
         dialogue = cast(HttpDialogue, http_dialogue)
         self.id = dialogue.incomplete_dialogue_label  # pylint: disable=C0103
-        envelope = Envelope(
+        return Envelope(
             to=http_message.to,
             sender=http_message.sender,
             message=http_message,
         )
-        return envelope
 
 
 class Response(web.Response):
@@ -219,15 +213,14 @@ class Response(web.Response):
 
     @classmethod
     def from_message(cls, http_message: HttpMessage) -> "Response":
-        """
-        Turn an envelope into a response.
+        """Turn an envelope into a response.
 
         :param http_message: the http_message
         :return: the response
         """
         if http_message.performative == HttpMessage.Performative.RESPONSE:
             if http_message.is_set("headers") and http_message.headers:
-                headers: Optional[dict] = dict(email.message_from_string(http_message.headers).items())
+                headers: dict | None = dict(email.message_from_string(http_message.headers).items())
             else:
                 headers = None
 
@@ -251,12 +244,11 @@ class APISpec:
 
     def __init__(
         self,
-        api_spec_path: Optional[str] = None,
-        server: Optional[str] = None,
+        api_spec_path: str | None = None,
+        server: str | None = None,
         logger: logging.Logger = _default_logger,
     ):
-        """
-        Initialize the API spec.
+        """Initialize the API spec.
 
         :param api_spec_path: Directory API path and filename of the API spec YAML source file.
         :param server: the server url
@@ -272,14 +264,13 @@ class APISpec:
                 api_spec = create_spec(api_spec_dict)
                 self._validator = RequestValidator(api_spec)
             except OpenAPIValidationError as error:
-                self.logger.error(f"API specification YAML source file not correctly formatted: {str(error)}")
+                self.logger.exception(f"API specification YAML source file not correctly formatted: {error!s}")
             except Exception:
                 self.logger.exception("API specification YAML source file not correctly formatted.")
                 raise
 
     def verify(self, request: Request) -> bool:
-        """
-        Verify a http_method, url and param against the provided API spec.
+        """Verify a http_method, url and param against the provided API spec.
 
         :param request: the request object
         :return: whether or not the request conforms with the API spec
@@ -300,8 +291,7 @@ class BaseAsyncChannel(ABC):
     """Base asynchronous channel class."""
 
     def __init__(self, address: Address, connection_id: PublicId) -> None:
-        """
-        Initialize a channel.
+        """Initialize a channel.
 
         :param address: the address of the agent.
         :param connection_id: public id of connection using this channel.
@@ -314,8 +304,7 @@ class BaseAsyncChannel(ABC):
 
     @abstractmethod
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """
-        Connect.
+        """Connect.
 
         Upon HTTP Channel connection, start the HTTP Server in its own thread.
 
@@ -326,13 +315,13 @@ class BaseAsyncChannel(ABC):
         self.is_stopped = False
 
     async def get_message(self) -> Optional["Envelope"]:
-        """
-        Get http response from in-queue.
+        """Get http response from in-queue.
 
         :return: None or envelope with http response.
         """
         if self._in_queue is None:
-            raise ValueError("Looks like channel is not connected!")
+            msg = "Looks like channel is not connected!"
+            raise ValueError(msg)
 
         try:
             return await self._in_queue.get()
@@ -341,16 +330,14 @@ class BaseAsyncChannel(ABC):
 
     @abstractmethod
     def send(self, envelope: Envelope) -> None:
-        """
-        Send the envelope in_queue.
+        """Send the envelope in_queue.
 
         :param envelope: the envelope
         """
 
     @abstractmethod
     async def disconnect(self) -> None:
-        """
-        Disconnect.
+        """Disconnect.
 
         Shut-off the HTTP Server.
         """
@@ -367,15 +354,14 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
         host: str,
         port: int,
         target_skill_id: PublicId,
-        api_spec_path: Optional[str],
+        api_spec_path: str | None,
         connection_id: PublicId,
         timeout_window: float = RESPONSE_TIMEOUT,
         logger: logging.Logger = _default_logger,
-        ssl_cert_path: Optional[str] = None,
-        ssl_key_path: Optional[str] = None,
+        ssl_cert_path: str | None = None,
+        ssl_key_path: str | None = None,
     ):
-        """
-        Initialize a channel and process the initial API specification from the file path (if given).
+        """Initialize a channel and process the initial API specification from the file path (if given).
 
         :param address: the address of the agent.
         :param host: RESTful API hostname / IP address
@@ -401,8 +387,8 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
 
         self._api_spec = APISpec(api_spec_path, self.server_address, logger)
         self.timeout_window = timeout_window
-        self.http_server: Optional[web.TCPSite] = None
-        self.pending_requests: Dict[RequestId, Future] = {}
+        self.http_server: web.TCPSite | None = None
+        self.pending_requests: dict[RequestId, Future] = {}
         self._dialogues = HttpDialogues(str(HTTPServerConnection.connection_id))
         self.logger = logger
 
@@ -412,8 +398,7 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
         return self._api_spec
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """
-        Connect.
+        """Connect.
 
         Upon HTTP Channel connection, start the HTTP Server in its own thread.
 
@@ -431,8 +416,7 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
                 self.logger.exception(f"Failed to start server on {self.host}:{self.port}.")
 
     async def _http_handler(self, http_request: BaseRequest) -> Response:
-        """
-        Verify the request then send the request to Agent as an envelope.
+        """Verify the request then send the request to Agent as an envelope.
 
         :param http_request: the request object
 
@@ -440,7 +424,8 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
         """
         request = await Request.create(http_request)
         if self._in_queue is None:  # pragma: nocover
-            raise ValueError("Channel not connected!")
+            msg = "Channel not connected!"
+            raise ValueError(msg)
 
         is_valid_request = self.api_spec.verify(request)
 
@@ -465,7 +450,7 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
             )
             return Response.from_message(response_message)
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             self.logger.warning(
                 dedent(f"""
                         Request timed out! Request={request} not handled as a result. "
@@ -495,13 +480,13 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
         await self.http_server.start()
 
     def send(self, envelope: Envelope) -> None:
-        """
-        Send the envelope in_queue.
+        """Send the envelope in_queue.
 
         :param envelope: the envelope
         """
         if self.http_server is None:  # pragma: nocover
-            raise ValueError("Server not connected, call connect first!")
+            msg = "Server not connected, call connect first!"
+            raise ValueError(msg)
 
         message = cast(HttpMessage, envelope.message)
         dialogue = self._dialogues.update(message)
@@ -524,13 +509,13 @@ class HTTPChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-attrib
             future.set_result(message)
 
     async def disconnect(self) -> None:
-        """
-        Disconnect.
+        """Disconnect.
 
         Shut-off the HTTP Server.
         """
         if self.http_server is None:  # pragma: nocover
-            raise ValueError("Server not connected, call connect first!")
+            msg = "Server not connected, call connect first!"
+            raise ValueError(msg)
 
         if not self.is_stopped:
             await self.http_server.stop()
@@ -547,20 +532,23 @@ class HTTPServerConnection(Connection):
     def __init__(self, **kwargs: Any) -> None:
         """Initialize a HTTP server connection."""
         super().__init__(**kwargs)
-        host = cast(Optional[str], self.configuration.config.get("host"))
-        port = cast(Optional[int], self.configuration.config.get("port"))
-        target_skill_id_ = cast(Optional[str], self.configuration.config.get("target_skill_id"))
+        host = cast(str | None, self.configuration.config.get("host"))
+        port = cast(int | None, self.configuration.config.get("port"))
+        target_skill_id_ = cast(str | None, self.configuration.config.get("target_skill_id"))
         if host is None or port is None or target_skill_id_ is None:  # pragma: nocover
-            raise ValueError("host and port and target_skill_id must be set!")
+            msg = "host and port and target_skill_id must be set!"
+            raise ValueError(msg)
         target_skill_id = PublicId.try_from_str(target_skill_id_)
         if target_skill_id is None:  # pragma: nocover
-            raise ValueError("Provided target_skill_id is not a valid public id.")
-        api_spec_path = cast(Optional[str], self.configuration.config.get("api_spec_path"))
-        ssl_cert_path = cast(Optional[str], self.configuration.config.get("ssl_cert"))
-        ssl_key_path = cast(Optional[str], self.configuration.config.get("ssl_key"))
+            msg = "Provided target_skill_id is not a valid public id."
+            raise ValueError(msg)
+        api_spec_path = cast(str | None, self.configuration.config.get("api_spec_path"))
+        ssl_cert_path = cast(str | None, self.configuration.config.get("ssl_cert"))
+        ssl_key_path = cast(str | None, self.configuration.config.get("ssl_key"))
 
         if bool(ssl_cert_path) != bool(ssl_key_path):  # pragma: nocover
-            raise ValueError("Please specify both ssl_cert and ssl_key or neither.")
+            msg = "Please specify both ssl_cert and ssl_key or neither."
+            raise ValueError(msg)
 
         self.channel = HTTPChannel(
             self.address,
@@ -597,8 +585,7 @@ class HTTPServerConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: "Envelope") -> None:
-        """
-        Send an envelope.
+        """Send an envelope.
 
         :param envelope: the envelop
         """
@@ -606,8 +593,7 @@ class HTTPServerConnection(Connection):
         self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional["Envelope"]:
-        """
-        Receive an envelope.
+        """Receive an envelope.
 
         :param args: positional arguments
         :param kwargs: keyword arguments

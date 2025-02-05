@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -40,7 +39,7 @@ from packages.eightballer.connections.redis_client.connection import (
 
 
 def envelope_it(message: PubsubMessage):
-    """Envelope the message"""
+    """Envelope the message."""
 
     return Envelope(
         to=message.to,
@@ -53,8 +52,7 @@ class PubsubDialogues(BasePubsubDialogues):
     """The dialogues class keeps track of all redis dialogues."""
 
     def __init__(self, self_address: Address, **kwargs) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: self address
         :param kwargs: keyword arguments
@@ -63,7 +61,7 @@ class PubsubDialogues(BasePubsubDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent

@@ -1,5 +1,4 @@
 # noqa: INP001
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -21,7 +20,6 @@
 
 """This module contains the tests of the http protocol package."""
 
-from typing import Type
 from unittest import mock
 
 import pytest
@@ -209,10 +207,9 @@ class AgentDialogue(HttpDialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: BaseDialogue.Role,
-        message_class: Type[HttpMessage],
+        message_class: type[HttpMessage],
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -233,8 +230,7 @@ class AgentDialogues(HttpDialogues):
     """The dialogues class keeps track of all dialogues."""
 
     def __init__(self, self_address: Address) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :return: None
         """
@@ -242,7 +238,7 @@ class AgentDialogues(HttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -267,10 +263,9 @@ class ServerDialogue(HttpDialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: BaseDialogue.Role,
-        message_class: Type[HttpMessage],
+        message_class: type[HttpMessage],
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -291,8 +286,7 @@ class ServerDialogues(HttpDialogues):
     """The dialogues class keeps track of all dialogues."""
 
     def __init__(self, self_address: Address) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :return: None
         """
@@ -300,7 +294,7 @@ class ServerDialogues(HttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent

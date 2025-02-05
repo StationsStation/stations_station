@@ -1,3 +1,1 @@
-"""
-tests for the websockets protocol.
-"""
+"""tests for the websockets protocol."""

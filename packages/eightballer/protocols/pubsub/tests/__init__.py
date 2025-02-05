@@ -1,3 +1,1 @@
-"""
-Init for the pubsub tests.
-"""
+"""Init for the pubsub tests."""

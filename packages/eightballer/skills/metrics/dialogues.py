@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -18,8 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the classes required for dialogue management.
+"""This module contains the classes required for dialogue management.
 
 - DefaultDialogue: The dialogue class maintains state of a dialogue of type default and manages it.
 - DefaultDialogues: The dialogues class keeps track of all dialogues of type default.
@@ -50,8 +48,7 @@ class DefaultDialogues(Model, BaseDefaultDialogues):
     """The dialogues class keeps track of all dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """
@@ -60,7 +57,7 @@ class DefaultDialogues(Model, BaseDefaultDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent
@@ -84,8 +81,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
     """The dialogues class keeps track of all dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """
@@ -94,7 +90,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent

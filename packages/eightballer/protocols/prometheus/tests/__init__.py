@@ -1,3 +1,1 @@
-"""
-Init for the Prometheus tests.
-"""
+"""Init for the Prometheus tests."""

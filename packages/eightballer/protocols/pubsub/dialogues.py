@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -17,15 +16,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the classes required for pubsub dialogue management.
+"""This module contains the classes required for pubsub dialogue management.
 
 - PubsubDialogue: The dialogue class maintains state of a dialogue and manages it.
 - PubsubDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import cast
+from collections.abc import Callable
 
 from aea.common import Address
 from aea.skills.base import Model
@@ -38,21 +37,21 @@ from packages.eightballer.protocols.pubsub.message import PubsubMessage
 class PubsubDialogue(Dialogue):
     """The pubsub dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    INITIAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {
             PubsubMessage.Performative.SUBSCRIBE,
             PubsubMessage.Performative.UNSUBSCRIBE,
             PubsubMessage.Performative.PUBLISH,
         }
     )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {
             PubsubMessage.Performative.SUBSCRIBED,
             PubsubMessage.Performative.UNSUBSCRIBED,
             PubsubMessage.Performative.ERROR,
         }
     )
-    VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
+    VALID_REPLIES: dict[Message.Performative, frozenset[Message.Performative]] = {
         PubsubMessage.Performative.ERROR: frozenset(),
         PubsubMessage.Performative.MESSAGE: frozenset(
             {PubsubMessage.Performative.MESSAGE, PubsubMessage.Performative.ERROR}
@@ -86,10 +85,9 @@ class PubsubDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[PubsubMessage] = PubsubMessage,
+        message_class: type[PubsubMessage] = PubsubMessage,
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
         :param dialogue_label: the identifier of the dialogue
         :param self_address: the address of the entity for whom this dialogue is maintained
@@ -122,11 +120,10 @@ class BasePubsubDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
-        dialogue_class: Type[PubsubDialogue] = PubsubDialogue,
+        dialogue_class: type[PubsubDialogue] = PubsubDialogue,
         default_role: Dialogue.Role = PubsubDialogue.Role.SUBSCRIBER,
     ) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param self_address: the address of the entity for whom dialogues are maintained
         :param dialogue_class: the dialogue class used
@@ -142,7 +139,7 @@ class BasePubsubDialogues(Dialogues, ABC):
         Dialogues.__init__(
             self,
             self_address=self_address,
-            end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
+            end_states=cast(frozenset[Dialogue.EndState], self.END_STATES),
             message_class=PubsubMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=_role_from_first_message,

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -20,7 +19,6 @@
 """Test messages module for pubsub protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
@@ -32,7 +30,7 @@ class TestMessagePubsub(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = PubsubMessage
 
-    def build_messages(self) -> List[PubsubMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[PubsubMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             PubsubMessage(
@@ -71,7 +69,7 @@ class TestMessagePubsub(BaseProtocolMessagesTestCase):
             ),
         ]
 
-    def build_inconsistent(self) -> List[PubsubMessage]:  # type: ignore[override]
+    def build_inconsistent(self) -> list[PubsubMessage]:  # type: ignore[override]
         """Build inconsistent messages to be used for testing."""
         return [
             PubsubMessage(

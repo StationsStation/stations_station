@@ -1,4 +1,3 @@
-# noqa: INP001
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2021-2023 Valory AG
@@ -57,12 +56,7 @@ class TestAgentLaunch(
 
     @classmethod
     def is_running(cls, process: subprocess.Popen, timeout: int = DEFAULT_LAUNCH_TIMEOUT) -> bool:
-        """Check if the AEA is launched and running (ready to process messages).
-
-        :param process: agent subprocess.
-        :param timeout: the timeout to wait for launch to complete
-        :return: bool indicating status
-        """
+        """Check if the AEA is launched and running (ready to process messages)."""
         missing_strings = cls.missing_from_output(process, (LAUNCH_SUCCEED_MESSAGE,), timeout, is_terminating=False)
 
         return missing_strings == []

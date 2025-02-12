@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihu3wxkioxutegrw3b27m7dv2d7pwqgak7cfpamygpr2jfygl6dsy
   __init__.py: bafybeigncgme2tvhrq2ohnbdajjexindsniloh5aufq45wm2ptznbyrpea
-  connection.py: bafybeihio3gj7urcpm3kdaiiey5w4npdpfyjirefrodikh3ljpexzliqnu
+  connection.py: bafybeiauwndny77cf3nvivm3xneq3htpj3eheceajqbso5gbpjjee3cypa
   tests/test_prometheus.py: bafybeigaw5yh4fgrwmwtrzkbzg2btrpiaoxrunsdxoxbioojqg6vgj4bm4
 fingerprint_ignore_patterns: []
 connections: []

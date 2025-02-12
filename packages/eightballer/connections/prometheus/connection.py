@@ -222,9 +222,7 @@ class PrometheusChannel:
                 response_msg = f"Metric {metric} successfully updated."
             else:
                 response_code = 400
-                response_msg = (
-                    f"Failed to update metric {metric}: {message.callable} is not a valid update function."
-                )
+                response_msg = f"Failed to update metric {metric}: {message.callable} is not a valid update function."
 
         return response_code, response_msg
 

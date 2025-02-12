@@ -5,12 +5,13 @@ license: Apache-2.0
 description: ''
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
-  tests/test_agent.py: bafybeiffqzhohuvuszkftzj4uguyhmplzsaxm4srudghhs4gd5ylgeapey
+  tests/__init__.py: bafybeibk76alseqt3ufreyev7rnz5zuk6dcftt7c2ob54gmhpt6xrhkg2y
+  tests/test_agent.py: bafybeicpkrwb5374u3zjcvcugjq3psmnk5w3eiua2mw75qhelscfy2vb5a
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
-- eightballer/prometheus:0.1.1:bafybeib75z6akopysvkfbmdom4v5ajsx7rz5piachojppiukxs7saxrh64
+- eightballer/prometheus:0.1.1:bafybeic452zt5tex4uxlrpax33spgj3dor26rulesszyex2orjz5dhllkq
 contracts: []
 protocols:
 - eightballer/default:0.1.0:bafybeigyjou5vodsbobshik523ykweos7ir4qz2lw4h6kjkqjlwrk4p3fa
@@ -19,7 +20,7 @@ protocols:
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 skills:
 - eightballer/metrics:0.1.0:bafybeie7us7enlnspmfk7c5dybzrbud4u7oc72phkbhufeuljaxbu5nctm
-- eightballer/prometheus:0.1.0:bafybeicmuxgesotcd7s66scoftahjaoiijcm4pjiblrubnr47mvgp233em
+- eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
 customs: []
 default_ledger: ethereum
 required_ledgers:

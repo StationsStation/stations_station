@@ -49,9 +49,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
         """
         Model.__init__(self, **kwargs)
 
-        def role_from_first_message(
-            message: Message, receiver_address: Address
-        ) -> BaseDialogue.Role:
+        def role_from_first_message(message: Message, receiver_address: Address) -> BaseDialogue.Role:
             """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message

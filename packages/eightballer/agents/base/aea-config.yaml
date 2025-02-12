@@ -11,7 +11,6 @@ connections:
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
 - eightballer/prometheus:0.1.1:bafybeib75z6akopysvkfbmdom4v5ajsx7rz5piachojppiukxs7saxrh64
-- eightballer/redis_client:0.1.0:bafybeidsk6u3nqntuyhabmwac773twvomowxmohxmgxmyz2tv4nppgso4e
 contracts: []
 protocols:
 - eightballer/default:0.1.0:bafybeigyjou5vodsbobshik523ykweos7ir4qz2lw4h6kjkqjlwrk4p3fa
@@ -62,10 +61,3 @@ config:
   host: 0.0.0.0
   port: 8888
   target_skill_id: eightballer/metrics:0.1.0
----
-public_id: eightballer/redis_client:0.1.0:bafybeid7u7cx2smnb3iz6zs6gt3k4ijwevm6yqqfo4pmziqoubl2p52ele
-type: connection
-config:
-  host: localhost
-  port: 6379
-  target_skill_id: eightballer/redis_subscriber:0.1.0

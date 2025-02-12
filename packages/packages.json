@@ -12,8 +12,8 @@
         "connection/eightballer/redis_client/0.1.0": "bafybeidsk6u3nqntuyhabmwac773twvomowxmohxmgxmyz2tv4nppgso4e",
         "skill/eightballer/metrics/0.1.0": "bafybeie7us7enlnspmfk7c5dybzrbud4u7oc72phkbhufeuljaxbu5nctm",
         "skill/eightballer/prometheus/0.1.0": "bafybeicmuxgesotcd7s66scoftahjaoiijcm4pjiblrubnr47mvgp233em",
-        "agent/eightballer/base/0.1.0": "bafybeibddvfeejqzhu5f6ohwxdkoimdml26z2stisqqccmlah5mujdfizm",
-        "service/eightballer/base/0.1.0": "bafybeif6qhdgqm5qhhey6ac3y6c5btbw7nxvp4reccte6uhfxt3pa7i7ia"
+        "agent/eightballer/base/0.1.0": "bafybeifo4w76mbqq3dpdrwdemtbeeqzljok5b6ajc6b5ty4uqvven337bm",
+        "service/eightballer/base/0.1.0": "bafybeid2k7ttlypr7ngyy37kk2wodhaxp4iuejromiqkefymdeaktdgiwa"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm"

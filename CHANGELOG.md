@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.1.16](https://github.com/StationsStation/stations_station/tree/v0.1.16) (2025-02-12)
+
 ## [v0.1.14](https://github.com/StationsStation/stations_station/tree/v0.1.14) (2025-02-12)
 
 ## [v0.1.13](https://github.com/StationsStation/stations_station/tree/v0.1.13) (2025-02-12)

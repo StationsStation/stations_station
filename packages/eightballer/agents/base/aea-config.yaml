@@ -53,7 +53,6 @@ logging_config:
 dependencies:
   open-aea-ledger-ethereum: {}
   open-aea-ledger-cosmos: {}
-  open-aea-ledger-solana: {}
   rich: {}
 default_connection: null
 ---

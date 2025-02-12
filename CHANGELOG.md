@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.1.11](https://github.com/StationsStation/stations_station/tree/v0.1.11) (2025-02-12)
+
+**Merged pull requests:**
+
+- fixes: deps [\#5](https://github.com/StationsStation/stations_station/pull/5)
+- feat: improvements generated [\#4](https://github.com/StationsStation/stations_station/pull/4)
+
 ## [v0.1.10](https://github.com/StationsStation/stations_station/tree/v0.1.10) (2024-08-17)
 
 ## [v0.1.8](https://github.com/StationsStation/stations_station/tree/v0.1.8) (2024-08-17)

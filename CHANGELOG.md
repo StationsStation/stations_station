@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.1.17](https://github.com/StationsStation/stations_station/tree/v0.1.17) (2025-02-19)
+
+**Closed issues:**
+
+- Package not found [\#6](https://github.com/StationsStation/stations_station/issues/6)
+
+**Merged pull requests:**
+
+- feat:fixed-all-tests [\#8](https://github.com/StationsStation/stations_station/pull/8)
+
 ## [v0.1.16](https://github.com/StationsStation/stations_station/tree/v0.1.16) (2025-02-12)
 
 ## [v0.1.14](https://github.com/StationsStation/stations_station/tree/v0.1.14) (2025-02-12)

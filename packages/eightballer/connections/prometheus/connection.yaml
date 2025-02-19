@@ -8,12 +8,12 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihu3wxkioxutegrw3b27m7dv2d7pwqgak7cfpamygpr2jfygl6dsy
   __init__.py: bafybeigncgme2tvhrq2ohnbdajjexindsniloh5aufq45wm2ptznbyrpea
-  connection.py: bafybeiauwndny77cf3nvivm3xneq3htpj3eheceajqbso5gbpjjee3cypa
-  tests/test_prometheus.py: bafybeigaw5yh4fgrwmwtrzkbzg2btrpiaoxrunsdxoxbioojqg6vgj4bm4
+  connection.py: bafybeicati2whxkbjpzdtrurmasgnbzikrqtjxoofak75ckb67vtinevtm
+  tests/test_prometheus.py: bafybeibmnqc55r5be7qakhwtcluvixaxc4pvz3vtnxxwj34hqmf7v74hgq
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- eightballer/prometheus:1.0.0:bafybeibvuazvki5pbeakpvcjm7icgf4wosacpcfnpyr4tk5dz3egoqny4a
+- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
 class_name: PrometheusConnection
 config:
   host: 0.0.0.0

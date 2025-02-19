@@ -9,16 +9,16 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihkuhhsdfw5qqtz2jwpfppub6yvsehzmvmaqjlxnal4v76x47mcrq
   __init__.py: bafybeif3pazkjyt6dltwcuowu7dz5vkol4gb2pj5vfi65x3to7w7qfucl4
-  connection.py: bafybeicuovvnwwc6a46gkzqw6r55qyvzzbggilmi54pjn3rwk43sepeqmy
+  connection.py: bafybeiettfkkav7jonp73gxvfuqq4vhaklet5zgeegvopxkxalob2vyx3i
   tests/__init__.py: bafybeidneidgntc3i2dgyjes5ljzu4ve7fhl5pixdrps2ipwpccxihxtny
   tests/data/petstore_sim.yaml: bafybeiaekkfxljlv57uviz4ug6isdqbzsnuxpsgy3dvhzh22daql3xh2i4
-  tests/test_http_server.py: bafybeibjdl3ebfslhm4q7kqcpdo3uvuu6robu6izv4aqfkkrq6tkik3isu
-  tests/test_http_server_and_client.py: bafybeidcavrd46bvpo2ym6cftk5icitpm6f6z6azkm22ffaoxrkt54j6uy
+  tests/test_http_server.py: bafybeiercvmma3y4ue6nbp5oeh7ofcds75id5wsvbj4vwd5nvld42tmf7a
+  tests/test_http_server_and_client.py: bafybeie2x5nylqn4rul5sszhxulhmaciwysb37szpmjpjo6hn2xe2gleye
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
+- eightballer/http_client:0.1.0:bafybeigo2eqc3fsx4hxts5zq77q6hgvcdzem5e3yxn4lk6el6xjcvhheba
 protocols:
-- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
+- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
 class_name: HTTPServerConnection
 config:
   api_spec_path: null

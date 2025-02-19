@@ -49,21 +49,12 @@ class PubsubDialogues(BasePubsubDialogues):
     """The dialogues class keeps track of all redis dialogues."""
 
     def __init__(self, self_address: Address, **kwargs) -> None:
-        """Initialize dialogues.
-
-        :param self_address: self address
-        :param kwargs: keyword arguments
-        """
+        """Initialize dialogues."""
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> Dialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             assert message, receiver_address
             return PubsubDialogue.Role.PUBLISHER  # TODO: check  # noqa
 
@@ -84,12 +75,7 @@ class BaseAsyncChannel:
         connection_id: PublicId,
         message_type: Message,
     ):
-        """Initialize the BaseAsyncChannel channel.
-
-        :param agent_address: the address of the agent.
-        :param connection_id: the id of the connection.
-        :param message_type: the associated message type.
-        """
+        """Initialize the BaseAsyncChannel channel."""
 
         self.agent_address = agent_address
         self.connection_id = connection_id
@@ -128,7 +114,6 @@ class BaseAsyncChannel:
         The result is translated into a response envelope.
         Finally, the response envelope is sent to the in-queue.
 
-        :param query_envelope: The envelope containing a protocol message.
         """
 
         if not (self._loop and self._connection):
@@ -219,11 +204,7 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
         connection_id: PublicId,
         **kwargs,
     ):
-        """Initialize the Redis channel.
-
-        :param agent_address: the address of the agent.
-        :param connection_id: the id of the connection.
-        """
+        """Initialize the Redis channel."""
 
         super().__init__(agent_address, connection_id, message_type=PubsubMessage)
 
@@ -234,10 +215,7 @@ class RedisAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instance-
         self.logger.debug("Initialised the Redis channel")
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """Connect channel using loop.
-
-        :param loop: asyncio event loop to use
-        """
+        """Connect channel using loop."""
 
         if self.is_stopped:
             self._loop = loop
@@ -353,10 +331,7 @@ class RedisConnection(Connection):
     connection_id = CONNECTION_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize a Redis connection.
-
-        :param kwargs: keyword arguments
-        """
+        """Initialize a Redis connection."""
 
         keys = [
             "host",
@@ -393,21 +368,13 @@ class RedisConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: Envelope) -> None:
-        """Send an envelope.
-
-        :param envelope: the envelope to send.
-        """
+        """Send an envelope."""
 
         self._ensure_connected()
         return await self.channel.send(envelope)
 
     async def receive(self, *args, **kwargs: Any) -> Optional[Envelope]:  # noqa
-        """Receive an envelope. Blocking.
-
-        :param args: arguments to receive
-        :param kwargs: keyword arguments to receive
-        :return: the envelope received, if present.  # noqa: DAR202
-        """
+        """Receive an envelope. Blocking."""
 
         self._ensure_connected()
         try:

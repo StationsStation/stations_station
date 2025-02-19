@@ -42,7 +42,7 @@ from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
-    HttpDialogues as BaseHttpDialogues,
+    BaseHttpDialogues,
 )
 
 
@@ -60,12 +60,7 @@ ssl_context = ssl.create_default_context(cafile=certifi.where())
 
 
 def headers_to_string(headers: CIMultiDictProxy) -> str:
-    """Convert headers to string.
-
-    :param headers: dict
-
-    :return: str
-    """
+    """Convert headers to string."""
     msg = email.message.Message()
     for name, value in headers.items():
         msg.add_header(name, value)
@@ -84,12 +79,7 @@ class HttpDialogues(BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del message, receiver_address  # pragma: nocover
             return HttpDialogue.Role.SERVER
 
@@ -114,13 +104,7 @@ class HTTPClientAsyncChannel:
         port: int,
         connection_id: PublicId,
     ):
-        """Initialize an http client channel.
-
-        :param agent_address: the address of the agent.
-        :param address: server hostname / IP address
-        :param port: server port number
-        :param connection_id: the id of the connection
-        """
+        """Initialize an http client channel."""
         self.agent_address = agent_address
         self.address = address
         self.port = port
@@ -136,30 +120,19 @@ class HTTPClientAsyncChannel:
         self.logger.debug("Initialised the HTTP client channel")
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """Connect channel using loop.
-
-        :param loop: asyncio event loop to use
-        """
+        """Connect channel using loop."""
         self._loop = loop
         self._in_queue = asyncio.Queue()
         self.is_stopped = False
 
     def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[HttpMessage, HttpDialogue | None]:
-        """Get a message copy and dialogue related to this message.
-
-        :param envelope: incoming envelope
-
-        :return: Tuple[MEssage, Optional[Dialogue]]
-        """
+        """Get a message copy and dialogue related to this message."""
         message = cast(HttpMessage, envelope.message)
         dialogue = cast(HttpDialogue | None, self._dialogues.update(message))
         return message, dialogue
 
     async def _http_request_task(self, request_envelope: Envelope) -> None:
-        """Perform http request and send back response.
-
-        :param request_envelope: request envelope.
-        """
+        """Perform http request and send back response."""
         if not self._loop:  # pragma: nocover
             msg = "Channel is not connected"
             raise ValueError(msg)
@@ -200,12 +173,7 @@ class HTTPClientAsyncChannel:
             await self._in_queue.put(envelope)
 
     async def _perform_http_request(self, request_http_message: HttpMessage) -> ClientResponse:
-        """Perform http request and return response.
-
-        :param request_http_message: HttpMessage with http request constructed.
-
-        :return: aiohttp.ClientResponse
-        """
+        """Perform http request and return response."""
         try:
             if request_http_message.is_set("headers") and request_http_message.headers:
                 headers: dict | None = dict(email.message_from_string(request_http_message.headers).items())
@@ -236,7 +204,6 @@ class HTTPClientAsyncChannel:
         Translate the response into a response envelop.
         Send the response envelope to the in-queue.
 
-        :param request_envelope: the envelope containing an http request
         """
         if self._loop is None or self.is_stopped:
             msg = "Can not send a message! Channel is not started!"
@@ -265,16 +232,12 @@ class HTTPClientAsyncChannel:
 
         Removes tasks from _tasks.
 
-        :param task: Task completed.
         """
         self._tasks.remove(task)
         self.logger.debug(f"Task completed: {task}")
 
     async def get_message(self) -> Optional["Envelope"]:
-        """Get http response from in-queue.
-
-        :return: None or envelope with http response.
-        """
+        """Get http response from in-queue."""
         if self._in_queue is None:
             msg = "Looks like channel is not connected!"
             raise ValueError(msg)
@@ -296,14 +259,6 @@ class HTTPClientAsyncChannel:
         """Convert an HTTP response object (from the 'requests' library) into an
         Envelope containing an HttpMessage (from the 'http' Protocol).
 
-        :param http_request_message: the message of the http request envelop
-        :param status_code: the http status code, int
-        :param headers: dict of http response headers
-        :param status_text: the http status_text, str
-        :param body: bytes of http response content
-        :param dialogue: the http dialogue
-
-        :return: Envelope with http response data.
         """
         http_message = dialogue.reply(
             performative=HttpMessage.Performative.RESPONSE,
@@ -350,10 +305,7 @@ class HTTPClientConnection(Connection):
     connection_id = PUBLIC_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize a HTTP client connection.
-
-        :param kwargs: keyword arguments
-        """
+        """Initialize a HTTP client connection."""
         super().__init__(**kwargs)
         host = cast(str, self.configuration.config.get("host"))
         port = cast(int, self.configuration.config.get("port"))
@@ -385,20 +337,12 @@ class HTTPClientConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: "Envelope") -> None:
-        """Send an envelope.
-
-        :param envelope: the envelop
-        """
+        """Send an envelope."""
         self._ensure_connected()
         self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional["Envelope"]:
-        """Receive an envelope.
-
-        :param args: positional arguments
-        :param kwargs: keyword arguments
-        :return: the envelope received, or None.
-        """
+        """Receive an envelope."""
         del args, kwargs
         self._ensure_connected()
         try:

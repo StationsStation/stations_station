@@ -65,13 +65,7 @@ class PrometheusBehaviour(TickerBehaviour):
         description: str,
         labels: dict[str, str],
     ) -> None:
-        """Add a prometheus metric.
-
-        :param metric_name: the name of the metric to add.
-        :param metric_type: the type of the metric.
-        :param description: a description of the metric.
-        :param labels: the metric labels.
-        """
+        """Add a prometheus metric."""
 
         prom_dialogues = cast(PrometheusDialogues, self.context.prometheus_dialogues)
 
@@ -93,13 +87,7 @@ class PrometheusBehaviour(TickerBehaviour):
         value: float,
         labels: dict[str, str],
     ) -> None:
-        """Update a prometheus metric.
-
-        :param metric_name: the name of the metric.
-        :param update_func: the name of the update function (e.g. inc, dec, set, ...).
-        :param value: the value to provide to the update function.
-        :param labels: the metric labels.
-        """
+        """Update a prometheus metric."""
 
         # context
         prom_dialogues = cast(PrometheusDialogues, self.context.prometheus_dialogues)

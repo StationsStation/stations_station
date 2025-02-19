@@ -9,13 +9,13 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihbuzfya7r4n572g4njetlw7zkn7fsjcwehvmzkx2wfphd4zsxzve
   __init__.py: bafybeicdpcirur5aiet3ic7ebwyo5hhfqcm3oryzmwvm3yuh4ui46u7ssu
-  connection.py: bafybeicvaom3hn7sp7b5nfzhizm26lpsre7ita6rg7lidepleunxwpklnq
+  connection.py: bafybeih3punyq2t447zlrtjxkaykm4cqri2gwgq5jxytvf245ea4xxn3hu
   tests/__init__.py: bafybeidcpnukojv5mtjrevm6xqq7zqstch7c56tjsyx55hn5vx3a7ztq5y
-  tests/test_connection.py: bafybeidmc67pwasu6c5cbztnwyjckuqi45pbdsrmtqdykwh35z7ldn3rdq
+  tests/test_connection.py: bafybeibbvcajrxvixyuhdgkjvuasgghcyhbd6fbsqbojl4ygss4xm7biv4
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- eightballer/pubsub:0.1.0:bafybeiakcgcainnriztgv47nn3o3vaakh6wmgpf6ztx6b4ubngmaaut5pe
+- eightballer/pubsub:0.1.0:bafybeiapabxw34klrf3rawzoicvj3xelgkf3ciy5jyiu57266zvs5opllq
 class_name: RedisConnection
 config:
   host: localhost

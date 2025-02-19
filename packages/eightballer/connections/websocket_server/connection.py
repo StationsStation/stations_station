@@ -59,22 +59,13 @@ class WebSocketDialogue(BaseWebsocketsDialogues):
     """The dialogues class keeps track of all http dialogues."""
 
     def __init__(self, self_address: Address = None, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param self_address: address of the dialogues maintainer.
-        :param kwargs: keyword arguments.
-        """
+        """Initialize dialogues."""
         del self_address
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return WebsocketsDialogue.Role.SERVER
 
@@ -105,7 +96,6 @@ class WebSocketChannel(HTTPChannel):
 
         Upon HTTP Channel connection, start the HTTP Server in its own thread.
 
-        :param loop: asyncio event loop
         """
         self._loop = loop
         self._in_queue = asyncio.Queue()
@@ -117,7 +107,6 @@ class WebSocketChannel(HTTPChannel):
 
         Upon HTTP Channel connection, start the HTTP Server in its own thread.
 
-        :param loop: asyncio event loop
         """
         if self.is_stopped:
             await self._base_connect(loop)
@@ -137,9 +126,6 @@ class WebSocketChannel(HTTPChannel):
 
         We use that to create a mapping of the request id to the future object.
 
-        :param http_request: the request object
-
-        :return: a tuple of response code and response description
         """
         self.logger.info(f"Handling initial http request for websocket connection from {http_request.remote}")
         connection_time = self._loop.time()
@@ -202,10 +188,7 @@ class WebSocketChannel(HTTPChannel):
                 self.open_connections.pop(request.id, None)
 
     async def close_session(self, request_id: RequestId, ws) -> None:
-        """Close the connection.
-
-        :param request_id: the request id
-        """
+        """Close the connection."""
         with contextlib.suppress(AttributeError):
             await ws.close()
         dialogue = self.pending_requests.pop(request_id, None)
@@ -232,10 +215,6 @@ class WebSocketChannel(HTTPChannel):
         Note, this message handles the initiall http connection for the websocket.
 
         We use that to create a mapping of the request id to the future object.
-
-        :param http_request: the request object
-
-        :return: a tuple of response code and response description
         """
         if self._in_queue is None:  # pragma: nocover
             msg = "Channel not connected!"
@@ -345,10 +324,7 @@ class WebSocketChannel(HTTPChannel):
         await self.wss_server.start()
 
     async def send(self, envelope: Envelope) -> None:  # pylint: disable=W0236
-        """Send the envelope in_queue.
-
-        :param envelope: the envelope
-        """
+        """Send the envelope in_queue."""
         if self.wss_server is None:  # pragma: nocover
             msg = "Server not connected, call connect first!"
             raise ValueError(msg)
@@ -440,7 +416,6 @@ class WebSocketServerConnection(HTTPServerConnection):
         - restricted_to_protocols: the set of protocols ids of the only supported protocols for this connection.
         - excluded_protocols: the set of protocols ids that we want to exclude for this connection.
 
-        :param kwargs: keyword arguments passed to component base
         """
 
         super().__init__(**kwargs)
@@ -470,10 +445,7 @@ class WebSocketServerConnection(HTTPServerConnection):
         await super().disconnect()
 
     async def send(self, envelope: Envelope) -> None:
-        """Send an envelope back to the client. This is the initial HTTP response.
-
-        :param envelope: the envelope to send.
-        """
+        """Send an envelope back to the client. This is the initial HTTP response."""
         self._ensure_connected()
         # note we dont yet want to send the envelope, we want to wait for the websocket connection
         if envelope.protocol_specification_id == HttpMessage.protocol_id:
@@ -482,12 +454,7 @@ class WebSocketServerConnection(HTTPServerConnection):
             await self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Envelope | None:
-        """Receive an envelope. Blocking.
-
-        :param args: arguments to receive
-        :param kwargs: keyword arguments to receive
-        :return: the envelope received, if present.  # noqa: DAR202
-        """
+        """Receive an envelope. Blocking."""
         del args, kwargs
         self._ensure_connected()
         # we check if we have enough available connections to handle the new request

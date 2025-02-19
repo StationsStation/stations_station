@@ -24,7 +24,6 @@ from aea.skills.base import Model
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
-from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
     HttpDialogues as BaseHttpDialogues,
@@ -37,47 +36,14 @@ from packages.eightballer.protocols.prometheus.dialogues import (
 
 HttpDialogue = BaseHttpDialogue
 PrometheusDialogue = BasePrometheusDialogue
-
-
-class HttpDialogues(Model, BaseHttpDialogues):
-    """This class keeps track of all http dialogues."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param kwargs: keyword arguments
-        """
-        Model.__init__(self, **kwargs)
-
-        def role_from_first_message(message: Message, receiver_address: Address) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent in this dialogue
-            """
-            if (message.performative == HttpMessage.Performative.REQUEST and message.sender != receiver_address) or (
-                message.performative == HttpMessage.Performative.RESPONSE and message.sender == receiver_address
-            ):
-                return BaseHttpDialogue.Role.SERVER
-
-            return BaseHttpDialogue.Role.CLIENT
-
-        BaseHttpDialogues.__init__(
-            self,
-            self_address=str(self.skill_id),
-            role_from_first_message=role_from_first_message,
-        )
+HttpDialogues = BaseHttpDialogues
 
 
 class PrometheusDialogues(Model, BasePrometheusDialogues):
     """The dialogues class keeps track of all prometheus dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param kwargs: keyword arguments
-        """
+        """Initialize dialogues."""
         self.enabled = kwargs.pop("enabled", False)
         self.metrics = kwargs.pop("metrics", [])
 
@@ -86,12 +52,7 @@ class PrometheusDialogues(Model, BasePrometheusDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return PrometheusDialogue.Role.AGENT
 

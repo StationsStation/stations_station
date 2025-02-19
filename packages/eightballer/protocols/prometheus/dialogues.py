@@ -67,13 +67,7 @@ class PrometheusDialogue(Dialogue):
         role: Dialogue.Role,
         message_class: type[PrometheusMessage] = PrometheusMessage,
     ) -> None:
-        """Initialize a dialogue.
-
-        :param dialogue_label: the identifier of the dialogue
-        :param self_address: the address of the entity for whom this dialogue is maintained
-        :param role: the role of the agent this dialogue is maintained for
-        :param message_class: the message class used
-        """
+        """Initialize a dialogue."""
         Dialogue.__init__(
             self,
             dialogue_label=dialogue_label,
@@ -96,12 +90,7 @@ class PrometheusDialogues(Dialogues, ABC):
         role_from_first_message: Callable[[Message, Address], Dialogue.Role],
         dialogue_class: type[PrometheusDialogue] = PrometheusDialogue,
     ) -> None:
-        """Initialize dialogues.
-
-        :param self_address: the address of the entity for whom dialogues are maintained
-        :param dialogue_class: the dialogue class used
-        :param role_from_first_message: the callable determining role from first message
-        """
+        """Initialize dialogues."""
         Dialogues.__init__(
             self,
             self_address=self_address,

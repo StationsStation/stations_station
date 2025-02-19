@@ -9,17 +9,17 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeid5462ekyrcitxhganoexoc6kxcofdy245evwdpprf3uwfpek7fcq
-  dialogues.py: bafybeihsi3gt3e5yz3tmfiqohg3lku4zp2vfgcvf67gitodfky22vbdrbe
-  handlers.py: bafybeicoqd3eouvvtzf2x6sj23ismuku7qoikslwhkmfsvq2xps5dv7rcq
+  dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
+  handlers.py: bafybeicuoeprwmuagb4g65gycntsla7cxg4ebtk6qjvgsrdtkd5ax3y2da
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_metrics.py: bafybeifcvrhrlnhnjwbjzedwoegkzfocptui5jkdycf7ydqed2ck76zes4
-  tests/test_metrics_dialogues.py: bafybeihdsbz3ocysfuqm3calcwjv5isafawvhbsdgz7rammmlsmqt7wwtu
+  tests/test_metrics.py: bafybeighag4i7m3jzzx2kzgncmq7tct2ljuvjqhyiezwswhncnpksun3eu
+  tests/test_metrics_dialogues.py: bafybeifcdtcx5lawrap6l2c75vc2yigqtp6hzijgf5n24m4aozkg3466lq
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeigyjou5vodsbobshik523ykweos7ir4qz2lw4h6kjkqjlwrk4p3fa
-- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
+- eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
+- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
 skills: []
 behaviours: {}
 handlers:

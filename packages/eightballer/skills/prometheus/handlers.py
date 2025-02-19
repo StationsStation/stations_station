@@ -44,10 +44,7 @@ class PrometheusHandler(Handler):
         self.context.logger.info("setting up PrometheusHandler")
 
     def handle(self, message: Message) -> None:
-        """Implement the reaction to a message.
-
-        :param message: the message
-        """
+        """Implement the reaction to a message."""
         message = cast(PrometheusMessage, message)
 
         # recover dialogue
@@ -65,10 +62,7 @@ class PrometheusHandler(Handler):
             )
 
     def _handle_unidentified_dialogue(self, msg: Message) -> None:
-        """Handle an unidentified dialogue.
-
-        :param msg: the unidentified message to be handled
-        """
+        """Handle an unidentified dialogue."""
 
         self.context.logger.info(f"received invalid message={msg}, unidentified dialogue.")
 
@@ -113,10 +107,7 @@ class HttpHandler(Handler):
         self.context.logger.info("setting up HttpHandler")
 
     def handle(self, message: Message) -> None:
-        """Implement the reaction to a message.
-
-        :param message: the message
-        """
+        """Implement the reaction to a message."""
 
         message = cast(HttpMessage, message)
 
@@ -135,10 +126,7 @@ class HttpHandler(Handler):
             self.context.logger.info(f"got unexpected http message: code = {message.status_code}")
 
     def _handle_response(self, http_msg: HttpMessage) -> None:
-        """Handle an Http response.
-
-        :param http_msg: the http message
-        """
+        """Handle an Http response."""
 
         model = self.context.advanced_data_request_model
 
@@ -172,11 +160,7 @@ class HttpHandler(Handler):
             )
 
     def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """Handle a Http request.
-
-        :param http_msg: the http message
-        :param http_dialogue: the http dialogue
-        """
+        """Handle a Http request."""
         self.context.logger.debug(
             f"received http request with method={http_msg.method}, url={http_msg.url} and body={http_msg.body!r}"
         )
@@ -187,11 +171,7 @@ class HttpHandler(Handler):
             self.context.logger.info("method 'post' is not supported.")
 
     def _handle_get(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """Handle a Http request of verb GET.
-
-        :param http_msg: the http message
-        :param http_dialogue: the http dialogue
-        """
+        """Handle a Http request of verb GET."""
         model = self.context.data_request_model
         outputs = [output["name"] for output in model.outputs]
         data = {key: value for (key, value) in self.context.shared_state.items() if key in outputs}
@@ -213,10 +193,7 @@ class HttpHandler(Handler):
             self.context.behaviours.prometheus_behaviour.update_prometheus_metric(metric_name, "inc", 1.0, {})
 
     def _handle_unidentified_dialogue(self, msg: Message) -> None:
-        """Handle an unidentified dialogue.
-
-        :param msg: the unidentified message to be handled
-        """
+        """Handle an unidentified dialogue."""
         self.context.logger.info(f"received invalid message={msg}, unidentified dialogue.")
 
     def teardown(self) -> None:

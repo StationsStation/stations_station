@@ -49,20 +49,12 @@ class PrometheusDialogues(BasePrometheusDialogues):
     """The dialogues class keeps track of all prometheus dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param kwargs: keyword arguments
-        """
+        """Initialize dialogues."""
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return PrometheusDialogue.Role.SERVER
 
@@ -84,13 +76,7 @@ class PrometheusChannel:
         port: int,
         logger: logging.Logger | logging.LoggerAdapter,
     ):
-        """Initialize a prometheus channel.
-
-        :param address: The address of the connection.
-        :param host: The host at which to expose the metrics.
-        :param port: The port at which to expose the metrics.
-        :param logger: The logger.
-        """
+        """Initialize a prometheus channel."""
         self.address = address
         self.metrics = {}  # type: Dict[str, aioprometheus.Collector]
         self.logger = logger
@@ -102,12 +88,7 @@ class PrometheusChannel:
         self._service = aioprometheus.Service()
 
     def _get_message_and_dialogue(self, envelope: Envelope) -> tuple[PrometheusMessage, PrometheusDialogue | None]:
-        """Get a message copy and dialogue related to this message.
-
-        :param envelope: incoming envelope
-
-        :return: Tuple[Message, Optional[Dialogue]]
-        """
+        """Get a message copy and dialogue related to this message."""
         message = cast(PrometheusMessage, envelope.message)
         dialogue = cast(PrometheusDialogue | None, self._dialogues.update(message))
         return message, dialogue
@@ -130,10 +111,7 @@ class PrometheusChannel:
         self.logger.info(f"Prometheus server started at {self._host}:{self._port}")
 
     async def send(self, envelope: Envelope) -> None:
-        """Process the envelopes to prometheus.
-
-        :param envelope: envelope
-        """
+        """Process the envelopes to prometheus."""
         sender = envelope.sender
         self.logger.debug(f"Processing message from {sender}: {envelope}")
         if envelope.protocol_specification_id != PrometheusMessage.protocol_specification_id:
@@ -142,10 +120,7 @@ class PrometheusChannel:
         await self._handle_prometheus_message(envelope)
 
     async def _handle_prometheus_message(self, envelope: Envelope) -> None:
-        """Handle messages to prometheus.
-
-        :param envelope: the envelope
-        """
+        """Handle messages to prometheus."""
         enforce(
             isinstance(envelope.message, PrometheusMessage),
             "Message not of type PrometheusMessage",
@@ -176,11 +151,7 @@ class PrometheusChannel:
         await self._send(envelope)
 
     async def _handle_add_metric(self, message: PrometheusMessage) -> tuple[int, str]:
-        """Handle add metric message.
-
-        :param message: the message to handle.
-        :return: the response code and response message.
-        """
+        """Handle add metric message."""
         if message.title in self.metrics:
             response_code = 409
             response_msg = "Metric already exists."
@@ -198,11 +169,7 @@ class PrometheusChannel:
         return response_code, response_msg
 
     async def _handle_update_metric(self, message: PrometheusMessage) -> tuple[int, str]:
-        """Handle update metric message.
-
-        :param message: the message to handle.
-        :return: the response code and response message.
-        """
+        """Handle update metric message."""
         metric = message.title
         if metric not in self.metrics:
             response_code = 404
@@ -227,10 +194,7 @@ class PrometheusChannel:
         return response_code, response_msg
 
     async def _send(self, envelope: Envelope) -> None:
-        """Send a message.
-
-        :param envelope: the envelope
-        """
+        """Send a message."""
         await self.queue.put(envelope)
 
     async def disconnect(self) -> None:
@@ -251,10 +215,7 @@ class PrometheusConnection(Connection):
     connection_id = PUBLIC_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize a connection to a local prometheus server.
-
-        :param kwargs: the keyword arguments of the parent class.
-        """
+        """Initialize a connection to a local prometheus server."""
         super().__init__(**kwargs)
 
         self.host = cast(str, self.configuration.config.get("host", DEFAULT_HOST))
@@ -282,20 +243,12 @@ class PrometheusConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: Envelope) -> None:
-        """Send an envelope.
-
-        :param envelope: the envelop
-        """
+        """Send an envelope."""
         self._ensure_connected()
         await self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional["Envelope"]:
-        """Receive an envelope.
-
-        :param args: positional arguments
-        :param kwargs: keyword arguments
-        :return: The received envelope or None
-        """
+        """Receive an envelope."""
         del args, kwargs
         self._ensure_connected()
         try:

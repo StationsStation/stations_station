@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 fetchai
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 """Serialization module for http protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,unused-argument,C0209,R1735
-from typing import cast
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
-from aea.protocols.base import Message, Serializer
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
+from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Serializer  # type: ignore
 
-from packages.eightballer.protocols.http import http_pb2
-from packages.eightballer.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.http import http_pb2  # type: ignore
+from packages.eightballer.protocols.http.message import HttpMessage  # type: ignore
 
 
 class HttpSerializer(Serializer):
@@ -44,7 +45,7 @@ class HttpSerializer(Serializer):
         msg = cast(HttpMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        http_msg = http_pb2.HttpMessage()
+        http_msg = http_pb2.HttpMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -97,7 +98,7 @@ class HttpSerializer(Serializer):
         :return: the 'Http' message.
         """
         message_pb = ProtobufMessage()
-        http_pb = http_pb2.HttpMessage()
+        http_pb = http_pb2.HttpMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (
@@ -140,5 +141,5 @@ class HttpSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content,
+            **performative_content
         )

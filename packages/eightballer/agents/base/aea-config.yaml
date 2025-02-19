@@ -9,18 +9,18 @@ fingerprint:
   tests/test_agent.py: bafybeicpkrwb5374u3zjcvcugjq3psmnk5w3eiua2mw75qhelscfy2vb5a
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
-- eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
-- eightballer/prometheus:0.1.1:bafybeic452zt5tex4uxlrpax33spgj3dor26rulesszyex2orjz5dhllkq
+- eightballer/http_client:0.1.0:bafybeigo2eqc3fsx4hxts5zq77q6hgvcdzem5e3yxn4lk6el6xjcvhheba
+- eightballer/http_server:0.1.0:bafybeicuooiamxoox5nhwmlzel2cq5znsfmvb6t5wddmnmpznblwkpvkle
+- eightballer/prometheus:0.1.1:bafybeiabjyx2p5zrrvgxqgfzdr34ulcqaozy564dvhfjf76itlaid6eoke
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeigyjou5vodsbobshik523ykweos7ir4qz2lw4h6kjkqjlwrk4p3fa
-- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
-- eightballer/prometheus:1.0.0:bafybeibvuazvki5pbeakpvcjm7icgf4wosacpcfnpyr4tk5dz3egoqny4a
-- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+- eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
+- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
+- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
+- open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 skills:
-- eightballer/metrics:0.1.0:bafybeie7us7enlnspmfk7c5dybzrbud4u7oc72phkbhufeuljaxbu5nctm
-- eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
+- eightballer/metrics:0.1.0:bafybeifbfkhlh4ct5vcrjcrlhdcqcswxy3rngb37sbmjnccenolzpc3pfe
+- eightballer/prometheus:0.1.0:bafybeiameg4uy73z3m4nmwuz5cotkdbpedvju33kjs7ky43ccnfxbnayiy
 customs: []
 default_ledger: ethereum
 required_ledgers:

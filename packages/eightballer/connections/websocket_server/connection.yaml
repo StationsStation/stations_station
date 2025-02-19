@@ -8,17 +8,17 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigdmqjqsy7q4ea3d2hf6sadcjepnur347rxbnogjau3ppteoqk53y
-  connection.py: bafybeifmddfcklxnccmzkwrcgyatbvya5ssh3uiuo2vaneriehq7wifbom
+  connection.py: bafybeihrxru42vqpvykimpty2wackgq4ljuh5csl2knohirfccsqpmfsg4
   readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
   tests/__init__.py: bafybeidneidgntc3i2dgyjes5ljzu4ve7fhl5pixdrps2ipwpccxihxtny
   tests/data/petstore_sim.yaml: bafybeiaekkfxljlv57uviz4ug6isdqbzsnuxpsgy3dvhzh22daql3xh2i4
-  tests/test_ws_server.py: bafybeih6zxgiewayomnr64lbxqtwakwrw3zy4nznmoyi7rqs4uhfwlrazu
+  tests/test_ws_server.py: bafybeia2gdjjlhqohxzqaopqdc6vao3loz2h6cxshgz6p52lcnykcdgcna
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
+- eightballer/http_server:0.1.0:bafybeicuooiamxoox5nhwmlzel2cq5znsfmvb6t5wddmnmpznblwkpvkle
 protocols:
-- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
-- eightballer/websockets:0.1.0:bafybeifv5w5urddjpiqlsynl3ljdtffhycrebeycnrljtus4hkm2gzygb4
+- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
+- eightballer/websockets:0.1.0:bafybeihdxrqup26ss4jsszcinurilys5bsvzuijwb75vdk7wsh6aeztz34
 class_name: WebSocketServerConnection
 config:
   host: 0.0.0.0

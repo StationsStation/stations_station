@@ -16,41 +16,33 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test dialogues module for default protocol."""
+"""Test dialogues module for http protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-import os
-
-import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.default.message import DefaultMessage
-from packages.eightballer.protocols.default.dialogues import (
-    DefaultDialogue,
-    BaseDefaultDialogues,
-)
+from packages.eightballer.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.http.dialogues import HttpDialogue, BaseHttpDialogues
 
 
-def load_data(custom_type):
-    """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
-        return yaml.safe_load(f)[custom_type]
+class TestDialoguesHttp(BaseProtocolDialoguesTestCase):
+    """Test for the 'http' protocol dialogues."""
 
+    MESSAGE_CLASS = HttpMessage
 
-class TestDialoguesDefault(BaseProtocolDialoguesTestCase):
-    """Test for the 'default' protocol dialogues."""
+    DIALOGUE_CLASS = HttpDialogue
 
-    MESSAGE_CLASS = DefaultMessage
+    DIALOGUES_CLASS = BaseHttpDialogues
 
-    DIALOGUE_CLASS = DefaultDialogue
-
-    DIALOGUES_CLASS = BaseDefaultDialogues
-
-    ROLE_FOR_THE_FIRST_MESSAGE = DefaultDialogue.Role.AGENT  # CHECK
+    ROLE_FOR_THE_FIRST_MESSAGE = HttpDialogue.Role.CLIENT  # CHECK
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
         return {
-            "performative": DefaultMessage.Performative.BYTES,
-            "content": b"some_bytes",
+            "performative": HttpMessage.Performative.REQUEST,
+            "method": "some str",
+            "url": "some str",
+            "version": "some str",
+            "headers": "some str",
+            "body": b"some_bytes",
         }

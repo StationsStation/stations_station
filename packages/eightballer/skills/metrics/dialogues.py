@@ -25,12 +25,6 @@
 - HttpDialogues: The dialogues class keeps track of all dialogues of type http.
 """
 
-from typing import Any
-
-from aea.skills.base import Model
-from aea.protocols.base import Address, Message
-from aea.protocols.dialogue.base import Dialogue as BaseDialogue
-
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
     HttpDialogues as BaseHttpDialogues,
@@ -42,65 +36,8 @@ from packages.eightballer.protocols.default.dialogues import (
 
 
 DefaultDialogue = BaseDefaultDialogue
-
-
-class DefaultDialogues(Model, BaseDefaultDialogues):
-    """The dialogues class keeps track of all dialogues."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param kwargs: keyword arguments
-        """
-        Model.__init__(self, **kwargs)
-
-        def role_from_first_message(  # pylint: disable=unused-argument
-            message: Message, receiver_address: Address
-        ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
-            _ = message
-            _ = receiver_address
-            return DefaultDialogue.Role.AGENT
-
-        BaseDefaultDialogues.__init__(
-            self,
-            self_address=self.context.agent_address,
-            role_from_first_message=role_from_first_message,
-        )
+DefaultDialogues = BaseDefaultDialogues
 
 
 HttpDialogue = BaseHttpDialogue
-
-
-class HttpDialogues(Model, BaseHttpDialogues):
-    """The dialogues class keeps track of all dialogues."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param kwargs: keyword arguments
-        """
-        Model.__init__(self, **kwargs)
-
-        def role_from_first_message(  # pylint: disable=unused-argument
-            message: Message, receiver_address: Address
-        ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
-            del message, receiver_address
-            return BaseHttpDialogue.Role.SERVER
-
-        BaseHttpDialogues.__init__(
-            self,
-            self_address=str(self.skill_id),
-            role_from_first_message=role_from_first_message,
-        )
+HttpDialogues = BaseHttpDialogues

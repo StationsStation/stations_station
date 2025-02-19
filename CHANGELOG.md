@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.1.18](https://github.com/StationsStation/stations_station/tree/v0.1.18) (2025-02-19)
+
+**Merged pull requests:**
+
+- feat:ensured-install-in-test [\#9](https://github.com/StationsStation/stations_station/pull/9)
+
 ## [v0.1.17](https://github.com/StationsStation/stations_station/tree/v0.1.17) (2025-02-19)
 
 **Closed issues:**

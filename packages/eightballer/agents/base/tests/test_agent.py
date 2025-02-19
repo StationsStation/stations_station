@@ -50,6 +50,7 @@ class TestAgentLaunch(
         self.set_agent_context(agent_name)
         self.generate_private_key("ethereum")
         self.add_private_key("ethereum", "ethereum_private_key.txt")
+        self.invoke("install")
         process = self.run_agent()
         is_running = self.is_running(process)
         assert is_running, "AEA not running within timeout!"

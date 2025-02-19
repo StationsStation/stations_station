@@ -37,10 +37,7 @@ class DataRequestModel(Model):
     """This class models the AdvancedDataRequest skill."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize dialogues.
-
-        :param kwargs: keyword arguments
-        """
+        """Initialize dialogues."""
         self.url = kwargs.pop("url", DEFAULT_URL)
         self.method = kwargs.pop("method", DEFAULT_METHOD)
         self.body = kwargs.pop("body", DEFAULT_BODY)

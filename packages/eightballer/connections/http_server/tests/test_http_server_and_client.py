@@ -35,7 +35,7 @@ from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
 from packages.eightballer.protocols.http.message import HttpMessage
-from packages.eightballer.protocols.http.dialogues import HttpDialogue, HttpDialogues
+from packages.eightballer.protocols.http.dialogues import HttpDialogue, BaseHttpDialogues
 from packages.eightballer.connections.http_client.connection import HTTPClientConnection
 from packages.eightballer.connections.http_server.connection import (
     HTTPServerConnection,
@@ -85,16 +85,11 @@ class TestClientServer:
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return HttpDialogue.Role.SERVER
 
-        self._skill_dialogues = HttpDialogues(SKILL_ID_STR, role_from_first_message=role_from_first_message)
+        self._skill_dialogues = BaseHttpDialogues(SKILL_ID_STR, role_from_first_message=role_from_first_message)
 
     def setup_client(self):
         """Set up client connection."""
@@ -122,16 +117,11 @@ class TestClientServer:
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return HttpDialogue.Role.CLIENT
 
-        self._client_dialogues = HttpDialogues(
+        self._client_dialogues = BaseHttpDialogues(
             self.client_agent_skill_id, role_from_first_message=role_from_first_message
         )
 

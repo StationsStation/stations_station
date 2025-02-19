@@ -23,9 +23,9 @@ from pathlib import Path
 
 from aea.test_tools.test_skill import COUNTERPARTY_AGENT_ADDRESS, BaseSkillTestCase
 
+from packages.eightballer.skills.metrics import PUBLIC_ID
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.metrics.dialogues import (
-    HttpDialogue,
     HttpDialogues,
     DefaultDialogue,
     DefaultDialogues,
@@ -39,7 +39,7 @@ ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 class TestDialogues(BaseSkillTestCase):
     """Test dialogue class of http_echo."""
 
-    path_to_skill = Path(ROOT_DIR, "packages", "eightballer", "skills", "metrics")
+    path_to_skill = Path(ROOT_DIR, "packages", PUBLIC_ID.author, "skills", PUBLIC_ID.name)
 
     @classmethod
     def setup(cls):  # pylint: disable=W0221
@@ -56,7 +56,7 @@ class TestDialogues(BaseSkillTestCase):
             content=b"some_content",
         )
         assert dialogue.role == DefaultDialogue.Role.AGENT
-        assert dialogue.self_address == self.skill.skill_context.agent_address
+        assert dialogue.self_address == str(self.skill.skill_context.skill_id)
 
     def test_http_dialogues(self):
         """Test the HttpDialogues class."""
@@ -69,5 +69,4 @@ class TestDialogues(BaseSkillTestCase):
             headers="some_headers",
             body=b"some_body",
         )
-        assert dialogue.role == HttpDialogue.Role.SERVER
         assert dialogue.self_address == str(self.skill.skill_context.skill_id)

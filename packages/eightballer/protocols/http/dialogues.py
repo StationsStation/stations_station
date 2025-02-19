@@ -1,21 +1,3 @@
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2022 fetchai
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
 """This module contains the classes required for http dialogue management.
 
 - HttpDialogue: The dialogue class maintains state of a dialogue and manages it.
@@ -27,10 +9,17 @@ from typing import cast
 from collections.abc import Callable
 
 from aea.common import Address
+from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.http.message import HttpMessage
+
+
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message."""
+    del sender, message
+    return HttpDialogue.Role.CLIENT
 
 
 class HttpDialogue(Dialogue):
@@ -63,38 +52,43 @@ class HttpDialogue(Dialogue):
     ) -> None:
         """Initialize a dialogue.
 
-        :param dialogue_label: the identifier of the dialogue
-        :param self_address: the address of the entity for whom this dialogue is maintained
-        :param role: the role of the agent this dialogue is maintained for
-        :param message_class: the message class used
+
+
+        Args:
+        ----
+               dialogue_label:  the identifier of the dialogue
+               self_address:  the address of the entity for whom this dialogue is maintained
+               role:  the role of the agent this dialogue is maintained for
+               message_class:  the message class used
+
         """
         Dialogue.__init__(
-            self,
-            dialogue_label=dialogue_label,
-            message_class=message_class,
-            self_address=self_address,
-            role=role,
+            self, dialogue_label=dialogue_label, message_class=message_class, self_address=self_address, role=role
         )
 
 
-class HttpDialogues(Dialogues, ABC):
+class BaseHttpDialogues(Dialogues, ABC):
     """This class keeps track of all http dialogues."""
 
     END_STATES = frozenset({HttpDialogue.EndState.SUCCESSFUL})
-
     _keep_terminal_state_dialogues = False
 
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: type[HttpDialogue] = HttpDialogue,
     ) -> None:
         """Initialize dialogues.
 
-        :param self_address: the address of the entity for whom dialogues are maintained
-        :param dialogue_class: the dialogue class used
-        :param role_from_first_message: the callable determining role from first message
+
+
+        Args:
+        ----
+               self_address:  the address of the entity for whom dialogues are maintained
+               dialogue_class:  the dialogue class used
+               role_from_first_message:  the callable determining role from first message
+
         """
         Dialogues.__init__(
             self,
@@ -103,4 +97,15 @@ class HttpDialogues(Dialogues, ABC):
             message_class=HttpMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
+        )
+
+
+class HttpDialogues(BaseHttpDialogues, Model):
+    """This class defines the dialogues used in Http."""
+
+    def __init__(self, **kwargs):
+        """Initialize dialogues."""
+        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
+        BaseHttpDialogues.__init__(
+            self, self_address=str(self.context.skill_id), role_from_first_message=_role_from_first_message
         )

@@ -52,21 +52,12 @@ class PubsubDialogues(BasePubsubDialogues):
     """The dialogues class keeps track of all redis dialogues."""
 
     def __init__(self, self_address: Address, **kwargs) -> None:
-        """Initialize dialogues.
-
-        :param self_address: self address
-        :param kwargs: keyword arguments
-        """
+        """Initialize dialogues."""
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return PubsubDialogue.Role.SUBSCRIBER
 

@@ -43,10 +43,7 @@ class HttpHandler(Handler):
         """Implement the setup."""
 
     def handle(self, message: Message) -> None:
-        """Implement the reaction to an envelope.
-
-        :param message: the message
-        """
+        """Implement the reaction to an envelope."""
         http_msg = cast(HttpMessage, message)
 
         # recover dialogue
@@ -63,10 +60,7 @@ class HttpHandler(Handler):
             self._handle_invalid(http_msg, http_dialogue)
 
     def _handle_unidentified_dialogue(self, http_msg: HttpMessage) -> None:
-        """Handle an unidentified dialogue.
-
-        :param http_msg: the message
-        """
+        """Handle an unidentified dialogue."""
         self.context.logger.info(f"received invalid http message={http_msg}, unidentified dialogue.")
         default_dialogues = cast(DefaultDialogues, self.context.default_dialogues)
         default_msg, _ = default_dialogues.create(
@@ -79,11 +73,7 @@ class HttpHandler(Handler):
         self.context.outbox.put_message(message=default_msg)
 
     def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """Handle a Http request.
-
-        :param http_msg: the http message
-        :param http_dialogue: the http dialogue
-        """
+        """Handle a Http request."""
         self.context.logger.info(
             f"received http request with method={http_msg.method}, url={http_msg.url} and body={http_msg.body}"
         )
@@ -93,11 +83,7 @@ class HttpHandler(Handler):
             self._handle_invalid(http_msg, http_dialogue)
 
     def _handle_get(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """Handle a Http request of verb GET.
-
-        :param http_msg: the http message
-        :param http_dialogue: the http dialogue
-        """
+        """Handle a Http request of verb GET."""
         if self.enable_cors:
             cors_headers = "Access-Control-Allow-Origin: *\n"
             cors_headers += "Access-Control-Allow-Methods: POST\n"
@@ -119,11 +105,7 @@ class HttpHandler(Handler):
         self.context.outbox.put_message(message=http_response)
 
     def _handle_post(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """Handle a Http request of verb POST.
-
-        :param http_msg: the http message
-        :param http_dialogue: the http dialogue
-        """
+        """Handle a Http request of verb POST."""
         http_response = http_dialogue.reply(
             performative=HttpMessage.Performative.RESPONSE,
             target_message=http_msg,
@@ -137,11 +119,7 @@ class HttpHandler(Handler):
         self.context.outbox.put_message(message=http_response)
 
     def _handle_invalid(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
-        """Handle an invalid http message.
-
-        :param http_msg: the http message
-        :param http_dialogue: the http dialogue
-        """
+        """Handle an invalid http message."""
         self.context.logger.warning(
             f"""
             Cannot handle http message of

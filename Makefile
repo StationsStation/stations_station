@@ -55,7 +55,7 @@ fmt:
 	poetry run adev -n 0 fmt
 
 test:
-	poetry run adev -v test
+	poetry run adev test
 
 install:
 	@echo "Setting up Git hooks..."

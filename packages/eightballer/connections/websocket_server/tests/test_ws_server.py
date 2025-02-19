@@ -38,7 +38,7 @@ from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue,
-    HttpDialogues as BaseHttpDialogues,
+    BaseHttpDialogues,
 )
 from packages.eightballer.connections.websocket_server.connection import (
     WebSocketServerConnection,
@@ -68,20 +68,12 @@ class HttpDialogues(BaseHttpDialogues):
     """The dialogues class keeps track of all http dialogues."""
 
     def __init__(self, self_address: Address) -> None:
-        """Initialize dialogues.
-
-        :return: None
-        """
+        """Initialize dialogues."""
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             del receiver_address, message
             return HttpDialogue.Role.SERVER
 
@@ -97,13 +89,7 @@ class TestWebSocketServer:
     """Tests for HTTPServer connection."""
 
     async def request(self, method: str, path: str, **kwargs) -> ClientResponse:
-        """Make a http request.
-
-        :param method: HTTP method: GET, POST etc
-        :param path: path to request on server. full url constructed automatically
-
-        :return: http response
-        """
+        """Make a http request."""
         try:
             url = f"http://{self.host}:{self.port}{path}"
             async with aiohttp.ClientSession() as session, session.request(method, url, **kwargs) as resp:

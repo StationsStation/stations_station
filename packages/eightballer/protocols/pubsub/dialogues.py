@@ -87,13 +87,7 @@ class PubsubDialogue(Dialogue):
         role: Dialogue.Role,
         message_class: type[PubsubMessage] = PubsubMessage,
     ) -> None:
-        """Initialize a dialogue.
-
-        :param dialogue_label: the identifier of the dialogue
-        :param self_address: the address of the entity for whom this dialogue is maintained
-        :param role: the role of the agent this dialogue is maintained for
-        :param message_class: the message class used
-        """
+        """Initialize a dialogue."""
         Dialogue.__init__(
             self,
             dialogue_label=dialogue_label,
@@ -123,12 +117,7 @@ class BasePubsubDialogues(Dialogues, ABC):
         dialogue_class: type[PubsubDialogue] = PubsubDialogue,
         default_role: Dialogue.Role = PubsubDialogue.Role.SUBSCRIBER,
     ) -> None:
-        """Initialize dialogues.
-
-        :param self_address: the address of the entity for whom dialogues are maintained
-        :param dialogue_class: the dialogue class used
-        :param role_from_first_message: the callable determining role from first message
-        """
+        """Initialize dialogues."""
         del role_from_first_message
 
         def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:

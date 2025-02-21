@@ -13,12 +13,12 @@ fingerprint:
   tests/__init__.py: bafybeidneidgntc3i2dgyjes5ljzu4ve7fhl5pixdrps2ipwpccxihxtny
   tests/data/petstore_sim.yaml: bafybeiaekkfxljlv57uviz4ug6isdqbzsnuxpsgy3dvhzh22daql3xh2i4
   tests/test_http_server.py: bafybeiercvmma3y4ue6nbp5oeh7ofcds75id5wsvbj4vwd5nvld42tmf7a
-  tests/test_http_server_and_client.py: bafybeie2x5nylqn4rul5sszhxulhmaciwysb37szpmjpjo6hn2xe2gleye
+  tests/test_http_server_and_client.py: bafybeieoswjt5pdji4mu5slf5ravmfl3g33zgvrxxtgp44onny3kgp6a6a
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_client:0.1.0:bafybeigo2eqc3fsx4hxts5zq77q6hgvcdzem5e3yxn4lk6el6xjcvhheba
+- eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 protocols:
-- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 class_name: HTTPServerConnection
 config:
   api_spec_path: null

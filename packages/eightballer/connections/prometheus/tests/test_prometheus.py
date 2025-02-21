@@ -27,6 +27,7 @@ from unittest.mock import MagicMock
 from aea.common import Address
 from aea.mail.base import Message
 from aea.identity.base import Identity
+from aea.test_tools.network import get_unused_tcp_port
 from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
@@ -54,7 +55,7 @@ class TestPrometheus:
         )
         configuration = ConnectionConfig(
             host="localhost",
-            port="8888",
+            port=get_unused_tcp_port(),
             connection_id=PrometheusConnection.connection_id,
         )
         self.client = PrometheusConnection(

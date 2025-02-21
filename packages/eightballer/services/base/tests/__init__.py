@@ -1,1 +1,1 @@
-"""Simple base tests for the service."""
+"""Init for the servcie tests."""

@@ -19,7 +19,7 @@ connections: []
 contracts: []
 protocols:
 - eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
-- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 skills: []
 behaviours: {}
 handlers:

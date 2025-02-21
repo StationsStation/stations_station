@@ -15,9 +15,9 @@ fingerprint:
   tests/test_ws_server.py: bafybeia2gdjjlhqohxzqaopqdc6vao3loz2h6cxshgz6p52lcnykcdgcna
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_server:0.1.0:bafybeicuooiamxoox5nhwmlzel2cq5znsfmvb6t5wddmnmpznblwkpvkle
+- eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 protocols:
-- eightballer/http:0.1.0:bafybeic4hfdvhnn36gyddw3usonjfyiqmckxkeaoh2pz5y3nxsat7dc4bq
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 - eightballer/websockets:0.1.0:bafybeihdxrqup26ss4jsszcinurilys5bsvzuijwb75vdk7wsh6aeztz34
 class_name: WebSocketServerConnection
 config:

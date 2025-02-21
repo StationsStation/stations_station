@@ -27,6 +27,7 @@ from unittest.mock import MagicMock
 from aea.common import Address
 from aea.mail.base import Message
 from aea.identity.base import Identity
+from aea.test_tools.network import get_unused_tcp_port
 from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
@@ -54,7 +55,7 @@ class TestClientServer:
         )
         configuration = ConnectionConfig(
             host="localhost",
-            port="8888",
+            port=get_unused_tcp_port(),
             connection_id=HTTPClientConnection.connection_id,
         )
         self.client = HTTPClientConnection(
@@ -80,3 +81,7 @@ class TestClientServer:
         """Set up test case."""
         self.loop = asyncio.get_event_loop()
         self.setup_client()
+
+    def teardown(self):
+        """Tear down test case."""
+        self.loop.run_until_complete(self.client.disconnect())

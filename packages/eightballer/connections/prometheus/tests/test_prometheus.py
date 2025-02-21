@@ -27,13 +27,13 @@ from unittest.mock import MagicMock
 from aea.common import Address
 from aea.mail.base import Message
 from aea.identity.base import Identity
+from aea.test_tools.network import get_unused_tcp_port
 from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
 from packages.eightballer.protocols.prometheus.dialogues import PrometheusDialogue, PrometheusDialogues
 from packages.eightballer.connections.prometheus.connection import PrometheusConnection
 
-from aea.test_tools.network import get_unused_tcp_port
 
 logger = logging.getLogger(__name__)
 

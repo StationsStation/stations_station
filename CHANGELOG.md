@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.1.19](https://github.com/StationsStation/stations_station/tree/v0.1.19) (2025-02-21)
+
+**Merged pull requests:**
+
+- fix-issues-with-http.proto-conflict [\#10](https://github.com/StationsStation/stations_station/pull/10)
+
 ## [v0.1.18](https://github.com/StationsStation/stations_station/tree/v0.1.18) (2025-02-19)
 
 **Merged pull requests:**

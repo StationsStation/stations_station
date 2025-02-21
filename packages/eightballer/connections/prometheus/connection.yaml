@@ -9,7 +9,7 @@ fingerprint:
   README.md: bafybeihu3wxkioxutegrw3b27m7dv2d7pwqgak7cfpamygpr2jfygl6dsy
   __init__.py: bafybeigncgme2tvhrq2ohnbdajjexindsniloh5aufq45wm2ptznbyrpea
   connection.py: bafybeicati2whxkbjpzdtrurmasgnbzikrqtjxoofak75ckb67vtinevtm
-  tests/test_prometheus.py: bafybeibmnqc55r5be7qakhwtcluvixaxc4pvz3vtnxxwj34hqmf7v74hgq
+  tests/test_prometheus.py: bafybeiavvftncgiaspivtluumtpjmdhhq77qusct4u3qcg3hzfiesbzyla
 fingerprint_ignore_patterns: []
 connections: []
 protocols:

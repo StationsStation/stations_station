@@ -14,7 +14,7 @@ fingerprint:
   tests/test_skill.py: bafybeih5jeglqi7qkk4v3unaiuteyutv5k6k7diytm4xelhbiwoprjcd44
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/prometheus:0.1.1:bafybeiabjyx2p5zrrvgxqgfzdr34ulcqaozy564dvhfjf76itlaid6eoke
+- eightballer/prometheus:0.1.1:bafybeiez4yeb3j2eq5perugiffdlpinqwpqcfpih4mlxxubvuy2szqg26e
 contracts: []
 protocols:
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4

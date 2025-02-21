@@ -103,7 +103,7 @@ class TestClientServer:
         )
         configuration = ConnectionConfig(
             host="localhost",
-            port="8888",
+            port=get_unused_tcp_port(),
             connection_id=HTTPClientConnection.connection_id,
         )
         self.client = HTTPClientConnection(

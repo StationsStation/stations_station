@@ -5,15 +5,15 @@
         "protocol/eightballer/prometheus/1.0.0": "bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4",
         "protocol/eightballer/websockets/0.1.0": "bafybeihdxrqup26ss4jsszcinurilys5bsvzuijwb75vdk7wsh6aeztz34",
         "protocol/eightballer/pubsub/0.1.0": "bafybeiapabxw34klrf3rawzoicvj3xelgkf3ciy5jyiu57266zvs5opllq",
-        "connection/eightballer/http_client/0.1.0": "bafybeiekovkcyvx4cqsofppzlv2nj7f2emw64a7tmkevca73g3ldrhuxx4",
-        "connection/eightballer/http_server/0.1.0": "bafybeigusg656qiodukjzh7lqev6g67wmq5jzjdzxapl3jdiufilxjmb3u",
-        "connection/eightballer/prometheus/0.1.1": "bafybeiabjyx2p5zrrvgxqgfzdr34ulcqaozy564dvhfjf76itlaid6eoke",
-        "connection/eightballer/websocket_server/0.1.0": "bafybeicpnlm4wxezc4po66nuqrnawqervua7c4sswkzorxunosxezcsxci",
+        "connection/eightballer/http_client/0.1.0": "bafybeieolrpwji5zdt34kkoygbeadoffc6vw4vfn3fbfjgeoauj7holgde",
+        "connection/eightballer/http_server/0.1.0": "bafybeifrafkyuxf77xy6em2mkemztasfo4yldj5cfcjnmc56dk4ajzkkum",
+        "connection/eightballer/prometheus/0.1.1": "bafybeiez4yeb3j2eq5perugiffdlpinqwpqcfpih4mlxxubvuy2szqg26e",
+        "connection/eightballer/websocket_server/0.1.0": "bafybeicbbz2hnihnkiif24wkz6jppqi5t7i7jp33r5efu52gew2ayz5mc4",
         "connection/eightballer/redis_client/0.1.0": "bafybeihvxygqsk3v5j3ctjzsi275vl6fviinq6y3he4fjsn7rpxvgp7pee",
         "skill/eightballer/metrics/0.1.0": "bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e",
-        "skill/eightballer/prometheus/0.1.0": "bafybeidsuags72tbwcqoqcrp4rhhcsp265adnjndbzubqtm5ge6zp7yijm",
-        "agent/eightballer/base/0.1.0": "bafybeianqugzujjxpdoxmqg7rasphrl6mejrludwd7o5myvugphjq6ovya",
-        "service/eightballer/base/0.1.0": "bafybeiek3wbzdchojngtkcuv7hqfsxbxsigocshhjn744fkscv75qz6cym"
+        "skill/eightballer/prometheus/0.1.0": "bafybeie6ppdozr7fdrbccfcvnbkbgjwidigspoasnbdmrkja7tpw3cbaeu",
+        "agent/eightballer/base/0.1.0": "bafybeig7mqz3u223faahytetdjp67ecyyktj3is2v5zrgioaovhfnyddty",
+        "service/eightballer/base/0.1.0": "bafybeiefinrpciezpbfmlvlnaz5f53sec5szwzcqjixoxrmtyjh32d3tzq"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm"
